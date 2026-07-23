@@ -1,0 +1,11 @@
+make: Entering directory '/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib'
+make: Nothing to be done for 'all'.
+make: Leaving directory '/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib'
+[build] base="/hpc2hdd/home/rmeng603/vectordb/t2i/1M/base.1M.fbin"
+[build] shape=1000x200
+[build] normalize=false
+[build] M=8 ef_construction=40 seed=100 preprocess_threads=4 insertion_threads=1 batch_size=1000
+[build] output="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/artifacts/001_t2i1m_validation/tsan_first1k_M8_ef40.bin"
+[build] inserted=1000/1000 elapsed_s=1.874
+RESULT command=build rows=1000 dim=200 M=8 ef_construction=40 preprocess_threads=4 insertion_threads=1 total_s=1.876753 save_s=0.002521 index_bytes=884740
+[tsan] completed without a reported data race

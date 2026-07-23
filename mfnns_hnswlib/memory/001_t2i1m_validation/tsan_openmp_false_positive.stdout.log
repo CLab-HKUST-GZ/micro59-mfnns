@@ -1,0 +1,9 @@
+make: Entering directory '/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib'
+mkdir -p /tmp/mfnns_hnswlib_tsan_build
+g++ -O1 -g -DNDEBUG -fsanitize=thread -std=c++17 -fopenmp -march=native -Wall -Wextra -Wpedantic -isystem src src/mfnns_hnsw_tool.cpp -o /tmp/mfnns_hnswlib_tsan_build/mfnns_hnsw_tool -pthread -fsanitize=thread
+make: Leaving directory '/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib'
+[build] base="/hpc2hdd/home/rmeng603/vectordb/t2i/1M/base.1M.fbin"
+[build] shape=1000x200
+[build] normalize=true
+[build] M=8 ef_construction=40 seed=100 threads=4 batch_size=1000
+[build] output="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/artifacts/001_t2i1m_validation/tsan_first1k_M8_ef40.bin"

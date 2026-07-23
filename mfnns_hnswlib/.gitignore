@@ -1,0 +1,6 @@
+artifacts/
+*.bin
+*.fbin
+*.ibin
+*.o
+mfnns_hnsw_tool

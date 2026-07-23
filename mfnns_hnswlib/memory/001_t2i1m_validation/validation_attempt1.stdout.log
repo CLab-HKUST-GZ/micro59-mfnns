@@ -1,0 +1,81 @@
+[environment] host=gpu3-9
+[environment] date=2026-07-23T18:18:44+08:00
+[environment] cpus=16
+g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+make: Entering directory '/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib'
+mkdir -p /tmp/mfnns_hnswlib_build
+g++ -O3 -DNDEBUG -std=c++17 -fopenmp -march=native -Wall -Wextra -Wpedantic -Isrc src/mfnns_hnsw_tool.cpp -o /tmp/mfnns_hnswlib_build/mfnns_hnsw_tool -pthread
+make: Leaving directory '/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib'
+[build] base="/hpc2hdd/home/rmeng603/vectordb/t2i/1M/base.1M.fbin"
+[build] shape=20000x200
+[build] normalize=true
+[build] M=16 ef_construction=100 seed=100 threads=16 batch_size=5000
+[build] output="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/artifacts/001_t2i1m_validation/t2i1m_first20k_norm_M16_ef100.bin"
+[build] inserted=5000/20000 elapsed_s=0.154
+[build] inserted=10000/20000 elapsed_s=0.288
+[build] inserted=15000/20000 elapsed_s=0.423
+[build] inserted=20000/20000 elapsed_s=0.559
+RESULT command=build rows=20000 dim=200 M=16 ef_construction=100 threads=16 total_s=0.594698 save_s=0.035839 index_bytes=18971896
+index="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/artifacts/001_t2i1m_validation/t2i1m_first20k_norm_M16_ef100.bin"
+file_bytes=18971896
+max_elements=20000
+current_elements=20000
+dimension=200
+bytes_per_element=940
+M=16
+maxM0=32
+ef_construction=100
+max_level=3
+entrypoint=4373
+[evaluate] base="/hpc2hdd/home/rmeng603/vectordb/t2i/1M/base.1M.fbin"
+[evaluate] queries="/hpc2hdd/home/rmeng603/vectordb/t2i/query/query.public.100K.fbin"
+[evaluate] index="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/artifacts/001_t2i1m_validation/t2i1m_first20k_norm_M16_ef100.bin"
+[evaluate] indexed_rows=20000 dim=200 queries=20 query_offset=0
+[evaluate] normalize=true k=10 ef=100 threads=16 batch_size=5000
+[gt] processed=5000/20000 elapsed_s=0.005
+[gt] processed=10000/20000 elapsed_s=0.008
+[gt] processed=15000/20000 elapsed_s=0.010
+[gt] processed=20000/20000 elapsed_s=0.012
+[evaluate] exact_gt_s=0.012073
+RESULT command=evaluate precision=fp32 recall@10=0.985000 recall_loss_vs_fp32=0.000000 overlap_vs_fp32=1.000000 total_query_s=0.003402 avg_query_ms=0.170105 qps=5878.732334
+RESULT command=evaluate precision=fp16_true recall@10=0.985000 recall_loss_vs_fp32=0.000000 overlap_vs_fp32=1.000000 total_query_s=0.027853 avg_query_ms=1.392669 qps=718.045787
+RESULT command=evaluate precision=fp16_fpma recall@10=0.970000 recall_loss_vs_fp32=0.015000 overlap_vs_fp32=0.985000 total_query_s=0.019914 avg_query_ms=0.995690 qps=1004.328404
+RESULT command=evaluate precision=fp8_e4m3 recall@10=0.950000 recall_loss_vs_fp32=0.035000 overlap_vs_fp32=0.965000 total_query_s=0.021742 avg_query_ms=1.087104 qps=919.874980
+RESULT command=evaluate precision=int16 recall@10=0.985000 recall_loss_vs_fp32=0.000000 overlap_vs_fp32=1.000000 total_query_s=0.005198 avg_query_ms=0.259912 qps=3847.456802
+RESULT command=evaluate precision=int8 recall@10=0.950000 recall_loss_vs_fp32=0.035000 overlap_vs_fp32=0.965000 total_query_s=0.006461 avg_query_ms=0.323027 qps=3095.718374
+[evaluate] result_csv="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/memory/001_t2i1m_validation/smoke_recall.csv"
+index="/hpc2hdd/home/rmeng603/workspace/MFANNS/recall_analysis/cache_t2i_mantissa/hnsw_index_text2img1M_norm_M32_ef100.bin"
+file_bytes=1076324680
+max_elements=1000000
+current_elements=1000000
+dimension=200
+bytes_per_element=1068
+M=32
+maxM0=64
+ef_construction=100
+max_level=4
+entrypoint=572291
+[evaluate] base="/hpc2hdd/home/rmeng603/vectordb/t2i/1M/base.1M.fbin"
+[evaluate] queries="/hpc2hdd/home/rmeng603/vectordb/t2i/query/query.public.100K.fbin"
+[evaluate] index="/hpc2hdd/home/rmeng603/workspace/MFANNS/recall_analysis/cache_t2i_mantissa/hnsw_index_text2img1M_norm_M32_ef100.bin"
+[evaluate] indexed_rows=1000000 dim=200 queries=10 query_offset=0
+[evaluate] normalize=true k=10 ef=100 threads=16 batch_size=100000
+[gt] processed=100000/1000000 elapsed_s=0.185
+[gt] processed=200000/1000000 elapsed_s=0.325
+[gt] processed=300000/1000000 elapsed_s=0.481
+[gt] processed=400000/1000000 elapsed_s=0.605
+[gt] processed=500000/1000000 elapsed_s=0.735
+[gt] processed=600000/1000000 elapsed_s=0.876
+[gt] processed=700000/1000000 elapsed_s=1.018
+[gt] processed=800000/1000000 elapsed_s=1.155
+[gt] processed=900000/1000000 elapsed_s=1.263
+[gt] processed=1000000/1000000 elapsed_s=1.337
+[evaluate] exact_gt_s=1.342283
+RESULT command=evaluate precision=fp32 recall@10=0.820000 recall_loss_vs_fp32=0.000000 overlap_vs_fp32=1.000000 total_query_s=0.012108 avg_query_ms=1.210768 qps=825.922332
+RESULT command=evaluate precision=fp16_true recall@10=0.820000 recall_loss_vs_fp32=0.000000 overlap_vs_fp32=0.990000 total_query_s=0.037773 avg_query_ms=3.777308 qps=264.738775
+RESULT command=evaluate precision=fp16_fpma recall@10=0.800000 recall_loss_vs_fp32=0.020000 overlap_vs_fp32=0.950000 total_query_s=0.044174 avg_query_ms=4.417393 qps=226.377871
+RESULT command=evaluate precision=fp8_e4m3 recall@10=0.770000 recall_loss_vs_fp32=0.050000 overlap_vs_fp32=0.840000 total_query_s=0.051654 avg_query_ms=5.165401 qps=193.595827
+RESULT command=evaluate precision=int16 recall@10=0.820000 recall_loss_vs_fp32=0.000000 overlap_vs_fp32=1.000000 total_query_s=0.018839 avg_query_ms=1.883884 qps=530.818302
+RESULT command=evaluate precision=int8 recall@10=0.770000 recall_loss_vs_fp32=0.050000 overlap_vs_fp32=0.860000 total_query_s=0.016605 avg_query_ms=1.660452 qps=602.245799
+[evaluate] result_csv="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/memory/001_t2i1m_validation/full_t2i1m_recall.csv"
+[validation] completed

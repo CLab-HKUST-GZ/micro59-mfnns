@@ -1,0 +1,31 @@
+==================
+WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock) (pid=2821691)
+  Cycle in lock order graph: M16 (0x7bb400000000) => M18 (0x7ffdb65602a0) => M16
+
+  Mutex M18 acquired here while holding mutex M16 in main thread:
+    #0 pthread_mutex_lock ../../../../src/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc:4165 (libtsan.so.0+0x526fc)
+    #1 __gthread_mutex_lock /usr/include/x86_64-linux-gnu/c++/9/bits/gthr-default.h:749 (mfnns_hnsw_tool+0x24c9a)
+    #2 std::mutex::lock() /usr/include/c++/9/bits/std_mutex.h:100 (mfnns_hnsw_tool+0x24c9a)
+    #3 std::unique_lock<std::mutex>::lock() /usr/include/c++/9/bits/unique_lock.h:141 (mfnns_hnsw_tool+0x24c9a)
+    #4 std::unique_lock<std::mutex>::unique_lock(std::mutex&) /usr/include/c++/9/bits/unique_lock.h:71 (mfnns_hnsw_tool+0x24c9a)
+    #5 hnswlib::HierarchicalNSW<float>::addPoint(void const*, unsigned long, int) src/hnswlib/../hnswlib/hnswalg.h:1590 (mfnns_hnsw_tool+0x24c9a)
+    #6 hnswlib::HierarchicalNSW<float>::addPoint(void const*, unsigned long, bool) src/hnswlib/../hnswlib/hnswalg.h:1356 (mfnns_hnsw_tool+0xd61d)
+    #7 run_build src/mfnns_hnsw_tool.cpp:394 (mfnns_hnsw_tool+0xd61d)
+    #8 main src/mfnns_hnsw_tool.cpp:756 (mfnns_hnsw_tool+0x12fda)
+
+    Hint: use TSAN_OPTIONS=second_deadlock_stack=1 to get more informative warning message
+
+  Mutex M16 acquired here while holding mutex M18 in main thread:
+    #0 pthread_mutex_lock ../../../../src/libsanitizer/sanitizer_common/sanitizer_common_interceptors.inc:4165 (libtsan.so.0+0x526fc)
+    #1 __gthread_mutex_lock /usr/include/x86_64-linux-gnu/c++/9/bits/gthr-default.h:749 (mfnns_hnsw_tool+0x1d1b2)
+    #2 std::mutex::lock() /usr/include/c++/9/bits/std_mutex.h:100 (mfnns_hnsw_tool+0x1d1b2)
+    #3 std::unique_lock<std::mutex>::lock() /usr/include/c++/9/bits/unique_lock.h:141 (mfnns_hnsw_tool+0x1d1b2)
+    #4 std::unique_lock<std::mutex>::unique_lock(std::mutex&) /usr/include/c++/9/bits/unique_lock.h:71 (mfnns_hnsw_tool+0x1d1b2)
+    #5 hnswlib::HierarchicalNSW<float>::searchBaseLayer(unsigned int, void const*, int) src/hnswlib/../hnswlib/hnswalg.h:470 (mfnns_hnsw_tool+0x1d1b2)
+    #6 hnswlib::HierarchicalNSW<float>::addPoint(void const*, unsigned long, int) src/hnswlib/../hnswlib/hnswalg.h:1643 (mfnns_hnsw_tool+0x256aa)
+    #7 hnswlib::HierarchicalNSW<float>::addPoint(void const*, unsigned long, bool) src/hnswlib/../hnswlib/hnswalg.h:1356 (mfnns_hnsw_tool+0xd61d)
+    #8 run_build src/mfnns_hnsw_tool.cpp:394 (mfnns_hnsw_tool+0xd61d)
+    #9 main src/mfnns_hnsw_tool.cpp:756 (mfnns_hnsw_tool+0x12fda)
+
+SUMMARY: ThreadSanitizer: lock-order-inversion (potential deadlock) /usr/include/x86_64-linux-gnu/c++/9/bits/gthr-default.h:749 in __gthread_mutex_lock
+==================

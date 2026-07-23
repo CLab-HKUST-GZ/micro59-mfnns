@@ -1,0 +1,11 @@
+index="/hpc2hdd/home/rmeng603/workspace/micro27-mfnns/mfnns_hnswlib/artifacts/001_t2i1m_validation/t2i1m_first20k_norm_M16_ef100.bin"
+file_bytes=18971896
+max_elements=20000
+current_elements=20000
+dimension=200
+bytes_per_element=940
+M=16
+maxM0=32
+ef_construction=100
+max_level=3
+entrypoint=4373
