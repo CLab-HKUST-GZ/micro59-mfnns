@@ -20,6 +20,9 @@ binaries, and generated artifacts are intentionally excluded.
 
 No Python, CMake, Faiss, or external hnswlib installation is required.
 
+Unless stated otherwise, commands in this README are run from the
+`mfnns_hnswlib` directory.
+
 Build with the repository-relative default:
 
 ```bash
@@ -48,7 +51,8 @@ followed by that many `float32` values; every row must have the same dimension.
 
 The standard entry point builds all 15 historical CPU-scale cache variants
 plus the normalized Deep1B and T2I1B indexes. With no target arguments it
-builds all 17 sequentially:
+builds all 17 sequentially. The CPU-index commands in this section are run
+from the top-level repository root, not from `mfnns_hnswlib`:
 
 ```bash
 script/cpu_index_build.sh
@@ -61,17 +65,20 @@ script/cpu_index_build.sh --list
 script/cpu_index_build.sh --dry-run
 ```
 
-The default dataset root is the relative path `../../../vectordb`. Override it
-with another repository-relative path when the datasets are elsewhere:
+The default dataset root is the top-level-repository-relative path
+`../../vectordb`. Override it with another relative path when the datasets are
+elsewhere:
 
 ```bash
 CPU_DATA_ROOT=data/vectordb script/cpu_index_build.sh \
   deep10m/normalized glove2m/normalized
 ```
 
-Generated indexes are written below `cpu_index/`. The expected directory tree
-is committed, while all serialized index files are ignored and must not be
-committed. See [`cpu_index/README.md`](cpu_index/README.md).
+Generated indexes are written below `mfnns_hnswlib/cpu_index/`. The expected
+directory tree is committed, while all serialized index files are ignored and
+must not be committed. See [`cpu_index/README.md`](cpu_index/README.md). The
+builder itself is kept at
+[`../script/cpu_index_build.sh`](../script/cpu_index_build.sh).
 
 ## Build one index directly
 
@@ -149,8 +156,8 @@ prepared seven-dataset cache:
 It uses the paper settings of 1,000 queries, `k=10`, and `efSearch=500`.
 Queries and ground truth are selected with `TABLE5_CACHE_ROOT`, while indexes
 come from `TABLE5_INDEX_ROOT` (default: `cpu_index`). All path overrides must
-be relative to the repository root. Build, output, dataset-process, and
-query-thread settings can also be overridden through environment variables. See
+be relative to the `mfnns_hnswlib` directory. Build, output, dataset-process,
+and query-thread settings can also be overridden through environment variables. See
 [`table5_reproduction/README.md`](table5_reproduction/README.md) for the cache
 layout and complete instructions.
 

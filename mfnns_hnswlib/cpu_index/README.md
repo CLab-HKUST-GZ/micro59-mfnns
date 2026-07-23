@@ -1,7 +1,8 @@
 # CPU index cache
 
 This tracked directory is the canonical output root for
-`script/cpu_index_build.sh`. The directory layout is:
+[`../../script/cpu_index_build.sh`](../../script/cpu_index_build.sh), which is
+run from the top-level repository root. The directory layout is:
 
 ```text
 cpu_index/<dataset>/<variant>/hnsw_index_M<M>_ef<ef_construction>.bin

@@ -31,7 +31,7 @@ cpu_index/<dataset>/<variant>/
   hnsw_index_M32_ef100.bin
 ```
 
-Create all seven required CPU indexes with
+From the top-level repository root, create all seven required CPU indexes with
 `script/cpu_index_build.sh deep10m/normalized glove2m/normalized pubmed/raw
 sift1m/normalized t2i1m/normalized w2v1m/normalized wiki1m/normalized`.
 The same script also supports all raw CPU-cache variants and the two 1B
@@ -50,7 +50,7 @@ The HNSW files use the native serialized format of the bundled MFANNS fork.
 
 ## Run
 
-From the repository root:
+From the `mfnns_hnswlib` directory:
 
 ```bash
 ./run_table5.sh

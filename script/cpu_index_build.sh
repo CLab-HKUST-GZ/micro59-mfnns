@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DATA_ROOT_REL="${CPU_DATA_ROOT:-../../../vectordb}"
-BUILD_DIR_REL="${CPU_BUILD_DIR:-build}"
+REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJECT_ROOT="${REPOSITORY_ROOT}/mfnns_hnswlib"
+DATA_ROOT_REL="${CPU_DATA_ROOT:-../../vectordb}"
+BUILD_DIR_REL="${CPU_BUILD_DIR:-mfnns_hnswlib/build}"
 THREADS="${CPU_INDEX_THREADS:-${SLURM_CPUS_PER_TASK:-8}}"
 BATCH_SIZE="${CPU_INDEX_BATCH_SIZE:-100000}"
 SEED="${CPU_INDEX_SEED:-100}"
@@ -45,8 +46,9 @@ one, for example deep10m/normalized. PubMed supports raw only; the two 1B
 datasets support normalized only.
 
 Relative-path environment overrides:
-  CPU_DATA_ROOT         Dataset root (default: ../../../vectordb)
-  CPU_BUILD_DIR         Compiler output directory (default: build)
+  CPU_DATA_ROOT         Dataset root (default: ../../vectordb)
+  CPU_BUILD_DIR         Compiler output directory
+                        (default: mfnns_hnswlib/build)
 
 Build settings:
   CPU_INDEX_THREADS     Normalization/insertion threads (default: allocation
@@ -238,8 +240,8 @@ if ((LIST_ONLY)); then
   exit 0
 fi
 
-DATA_ROOT="${PROJECT_ROOT}/${DATA_ROOT_REL}"
-BUILD_DIR="${PROJECT_ROOT}/${BUILD_DIR_REL}"
+DATA_ROOT="${REPOSITORY_ROOT}/${DATA_ROOT_REL}"
+BUILD_DIR="${REPOSITORY_ROOT}/${BUILD_DIR_REL}"
 TOOL="${BUILD_DIR}/mfnns_hnsw_tool"
 
 if ((!DRY_RUN)); then
