@@ -101,6 +101,26 @@ ground truth. For each precision mode it reports:
 
 FP32 is always evaluated first, even if omitted from `--precisions`.
 
+## Reproduce paper Table 5
+
+The standalone Table 5 workflow evaluates the four precision/ET variants and
+derives the ET, risky-update, and boundary-decision-flip ratios from the
+prepared seven-dataset cache:
+
+```bash
+./run_table5.sh
+```
+
+It uses the paper settings of 1,000 queries, `k=10`, and `efSearch=500`.
+Inputs are selected with `TABLE5_CACHE_ROOT`; build, output, dataset-process,
+and query-thread settings can also be overridden through environment
+variables. See
+[`table5_reproduction/README.md`](table5_reproduction/README.md) for the cache
+layout and complete instructions.
+
+Generated tables, detailed counters, and logs are written below
+`artifacts/table5_reproduction` and are not committed.
+
 ## Source provenance and license
 
 The bundled fork came from

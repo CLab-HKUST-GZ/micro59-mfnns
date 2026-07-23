@@ -1,6 +1,10 @@
 artifacts/
+memory/
+__pycache__/
+*.pyc
 *.bin
 *.fbin
 *.ibin
 *.o
 mfnns_hnsw_tool
+table5_dataset_runner

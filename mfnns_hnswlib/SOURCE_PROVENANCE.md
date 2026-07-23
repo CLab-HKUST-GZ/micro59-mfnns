@@ -42,5 +42,17 @@ The package intentionally makes these narrow changes:
 6. Trailing whitespace was removed mechanically from the copied headers; this
    does not change their semantics.
 
+## Table 5 workflow
+
+`table5_reproduction/table5_dataset_runner.cpp` consolidates the experiment
+definitions and calculations from these local MFANNS records:
+
+- `memory/20260613/02_fp16_dual_queue_accuracy_7datasets`;
+- `memory/20260614/002_fpma_error_ganns_7datasets`;
+- `memory/20260614/004_directional_candidate_top_ratio`.
+
+It uses the bundled HNSW implementation directly, so reproducing the table
+does not depend on the historical Python extension or its build directory.
+
 The package does not claim byte-for-byte identity with an upstream hnswlib
 release. It preserves the MFANNS fork's native serialized-index layout.
