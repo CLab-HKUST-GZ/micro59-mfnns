@@ -5,7 +5,7 @@ Snapshot date: 2026-07-23
 The hnswlib-derived headers were copied from:
 
 ```text
-/hpc2hdd/home/rmeng603/workspace/MFANNS/recall_analysis/hnswlib
+../../MFANNS/recall_analysis/hnswlib
 ```
 
 The source repository did not contain a commit-tracked historical snapshot for
@@ -32,13 +32,15 @@ The package intentionally makes these narrow changes:
    GCC and Clang see a complete dynamic-cast target.
 2. The HNSW level/update random generators are protected by mutexes.
 3. `L2SpaceDynamicPrecision` initializes members in declaration order.
-4. The public build tool serializes `addPoint`. ThreadSanitizer exposed a
-   potential link-lock/global-lock inversion in concurrent insertion; keeping
-   insertion serial removes that reachable risk and provides deterministic
-   output. Normalization, exact ground truth, and query evaluation remain
-   parallel.
-5. `mfnns_hnsw_tool.cpp` adds strict FBIN validation, streaming construction,
-   index-header validation, exact ground truth, and recall-loss reporting.
+4. ThreadSanitizer exposed a potential link-lock/global-lock inversion in
+   concurrent insertion. Insertions now acquire the HNSW global lock before
+   the new-node lock, while retaining the new-node lock until every level has
+   been initialized. This removes the global/node cycle without exposing
+   partially initialized nodes and permits configurable parallel construction.
+   Single-thread insertion remains available for byte-for-byte determinism.
+5. `mfnns_hnsw_tool.cpp` adds strict FBIN/FVECS validation, streaming
+   construction, index-header validation, exact ground truth, and recall-loss
+   reporting.
 6. Trailing whitespace was removed mechanically from the copied headers; this
    does not change their semantics.
 

@@ -1,6 +1,7 @@
 #include <hnswlib/space_l2_dynamic_precision_et.h>
 
 #include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <cctype>
 #include <cmath>
@@ -11,10 +12,12 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <mutex>
 #include <queue>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -32,6 +35,11 @@ using Label = hnswlib::labeltype;
 struct FbinHeader {
     uint64_t rows = 0;
     uint64_t dim = 0;
+};
+
+enum class VectorFormat {
+    FBIN,
+    FVECS,
 };
 
 struct IndexHeader {
@@ -179,6 +187,53 @@ FbinHeader read_fbin_header(const fs::path& path) {
     return {static_cast<uint64_t>(rows), static_cast<uint64_t>(dim)};
 }
 
+VectorFormat parse_vector_format(const std::string& raw_format) {
+    const std::string format = Options::lowercase(raw_format);
+    if (format == "fbin") {
+        return VectorFormat::FBIN;
+    }
+    if (format == "fvecs") {
+        return VectorFormat::FVECS;
+    }
+    throw std::runtime_error(
+        "Unsupported --base-format: " + raw_format + " (expected fbin or fvecs)");
+}
+
+const char* vector_format_name(VectorFormat format) {
+    return format == VectorFormat::FBIN ? "fbin" : "fvecs";
+}
+
+FbinHeader read_fvecs_header(const fs::path& path) {
+    std::ifstream input(path, std::ios::binary);
+    if (!input) {
+        throw std::runtime_error("Cannot open FVECS file: " + path.string());
+    }
+
+    int32_t dim = 0;
+    read_pod(input, dim, "first FVECS dimension from " + path.string());
+    if (dim <= 0) {
+        throw std::runtime_error("Invalid FVECS dimension in " + path.string());
+    }
+
+    const uint64_t record_bytes =
+        sizeof(int32_t) +
+        checked_product(static_cast<uint64_t>(dim), sizeof(float), "FVECS record size");
+    const uint64_t actual_bytes = fs::file_size(path);
+    if (actual_bytes == 0 || actual_bytes % record_bytes != 0) {
+        std::ostringstream message;
+        message << "FVECS size mismatch for " << path << ": " << actual_bytes
+                << " bytes is not divisible by record size " << record_bytes;
+        throw std::runtime_error(message.str());
+    }
+    return {actual_bytes / record_bytes, static_cast<uint64_t>(dim)};
+}
+
+FbinHeader read_vector_header(const fs::path& path, VectorFormat format) {
+    return format == VectorFormat::FBIN
+               ? read_fbin_header(path)
+               : read_fvecs_header(path);
+}
+
 IndexHeader read_index_header(const fs::path& path) {
     std::ifstream input(path, std::ios::binary);
     if (!input) {
@@ -254,6 +309,61 @@ std::vector<float> read_fbin_rows(const fs::path& path,
     return result;
 }
 
+std::vector<float> read_fvecs_rows(const fs::path& path,
+                                   const FbinHeader& header,
+                                   uint64_t start,
+                                   uint64_t count) {
+    if (start > header.rows || count > header.rows - start) {
+        throw std::runtime_error("Requested FVECS row range is out of bounds");
+    }
+    const uint64_t values = checked_product(count, header.dim, "selected FVECS rows");
+    if (values > std::numeric_limits<size_t>::max()) {
+        throw std::runtime_error("Selected FVECS row range is too large for this process");
+    }
+
+    const uint64_t record_bytes =
+        sizeof(int32_t) +
+        checked_product(header.dim, sizeof(float), "FVECS record size");
+    const uint64_t byte_offset = checked_product(start, record_bytes, "FVECS row offset");
+    std::ifstream input(path, std::ios::binary);
+    if (!input) {
+        throw std::runtime_error("Cannot open FVECS file: " + path.string());
+    }
+    input.seekg(static_cast<std::streamoff>(byte_offset), std::ios::beg);
+    if (!input) {
+        throw std::runtime_error("Failed to seek in FVECS file: " + path.string());
+    }
+
+    std::vector<float> result(static_cast<size_t>(values));
+    for (uint64_t row = 0; row < count; ++row) {
+        int32_t row_dim = 0;
+        read_pod(input, row_dim, "FVECS row dimension from " + path.string());
+        if (row_dim <= 0 || static_cast<uint64_t>(row_dim) != header.dim) {
+            throw std::runtime_error(
+                "Inconsistent FVECS row dimension in " + path.string());
+        }
+        float* destination = result.data() + static_cast<size_t>(row * header.dim);
+        input.read(
+            reinterpret_cast<char*>(destination),
+            static_cast<std::streamsize>(header.dim * sizeof(float)));
+        if (!input) {
+            throw std::runtime_error(
+                "Failed to read selected rows from FVECS file: " + path.string());
+        }
+    }
+    return result;
+}
+
+std::vector<float> read_vector_rows(const fs::path& path,
+                                    const FbinHeader& header,
+                                    VectorFormat format,
+                                    uint64_t start,
+                                    uint64_t count) {
+    return format == VectorFormat::FBIN
+               ? read_fbin_rows(path, header, start, count)
+               : read_fvecs_rows(path, header, start, count);
+}
+
 void normalize_vectors(std::vector<float>& data, uint64_t rows, uint64_t dim, int threads) {
 #pragma omp parallel for num_threads(threads) schedule(static)
     for (int64_t row = 0; row < static_cast<int64_t>(rows); ++row) {
@@ -288,17 +398,18 @@ void print_usage(std::ostream& output) {
     output
         << "mfnns_hnsw_tool: build, inspect, and evaluate MFNNS HNSW indexes\n\n"
         << "Usage:\n"
-        << "  mfnns_hnsw_tool build --base BASE.fbin --index OUT.bin [options]\n"
+        << "  mfnns_hnsw_tool build --base BASE --index OUT.bin [options]\n"
         << "  mfnns_hnsw_tool inspect --index INDEX.bin\n"
         << "  mfnns_hnsw_tool evaluate --base BASE.fbin --queries QUERY.fbin "
            "--index INDEX.bin [options]\n\n"
         << "Build options:\n"
+        << "  --base-format FORMAT     fbin or fvecs (default: fbin)\n"
         << "  --normalize 0|1          L2-normalize each vector (default: 1)\n"
         << "  --limit N                Build the first N rows (default: all)\n"
         << "  --m N                    HNSW M (default: 16)\n"
         << "  --ef-construction N      HNSW ef_construction (default: 500)\n"
         << "  --threads N              OpenMP normalization threads (default: 1)\n"
-        << "                           HNSW insertion is intentionally serialized\n"
+        << "  --insertion-threads N    HNSW construction threads (default: --threads)\n"
         << "  --batch-size N           Streaming batch rows (default: 100000)\n"
         << "  --seed N                 HNSW random seed (default: 100)\n"
         << "  --force 0|1              Replace an existing output index (default: 0)\n\n"
@@ -337,8 +448,9 @@ void run_inspect(const Options& options) {
 }
 
 void run_build(const Options& options) {
-    options.reject_unknown({"help", "base", "index", "normalize", "limit", "m",
-                            "ef-construction", "threads", "batch-size", "seed", "force"});
+    options.reject_unknown({"help", "base", "base-format", "index", "normalize",
+                            "limit", "m", "ef-construction", "threads",
+                            "insertion-threads", "batch-size", "seed", "force"});
     if (options.has("help")) {
         print_usage(std::cout);
         return;
@@ -346,7 +458,9 @@ void run_build(const Options& options) {
 
     const fs::path base_path = options.require("base");
     const fs::path index_path = options.require("index");
-    const FbinHeader base_header = read_fbin_header(base_path);
+    const VectorFormat base_format =
+        parse_vector_format(options.get("base-format", "fbin"));
+    const FbinHeader base_header = read_vector_header(base_path, base_format);
     const bool normalize = options.get_bool("normalize", true);
     const bool force = options.get_bool("force", false);
     const uint64_t requested_limit = options.get_u64("limit", 0);
@@ -357,6 +471,8 @@ void run_build(const Options& options) {
     const uint64_t seed = options.get_u64("seed", 100);
     const uint64_t batch_size = options.get_u64("batch-size", 100000);
     const int threads = checked_thread_count(options.get_u64("threads", 1));
+    const int insertion_threads = checked_thread_count(
+        options.get_u64("insertion-threads", static_cast<uint64_t>(threads)));
 
     if (rows == 0 || batch_size == 0 || m < 2 || m > 10000 ||
         ef_construction < m || seed > std::numeric_limits<size_t>::max()) {
@@ -369,11 +485,12 @@ void run_build(const Options& options) {
     ensure_parent_directory(index_path);
 
     std::cout << "[build] base=" << fs::absolute(base_path) << '\n'
+              << "[build] base_format=" << vector_format_name(base_format) << '\n'
               << "[build] shape=" << rows << "x" << base_header.dim << '\n'
               << "[build] normalize=" << (normalize ? "true" : "false") << '\n'
               << "[build] M=" << m << " ef_construction=" << ef_construction
               << " seed=" << seed << " preprocess_threads=" << threads
-              << " insertion_threads=1"
+              << " insertion_threads=" << insertion_threads
               << " batch_size=" << batch_size << '\n'
               << "[build] output=" << fs::absolute(index_path) << std::endl;
 
@@ -386,14 +503,59 @@ void run_build(const Options& options) {
     uint64_t inserted = 0;
     while (inserted < rows) {
         const uint64_t count = std::min(batch_size, rows - inserted);
-        std::vector<float> batch = read_fbin_rows(base_path, base_header, inserted, count);
+        std::vector<float> batch =
+            read_vector_rows(base_path, base_header, base_format, inserted, count);
         if (normalize) {
             normalize_vectors(batch, count, base_header.dim, threads);
         }
 
-        for (uint64_t row = 0; row < count; ++row) {
-            index.addPoint(batch.data() + row * base_header.dim,
-                           static_cast<Label>(inserted + row));
+        std::atomic<bool> insertion_failed{false};
+        std::atomic<uint64_t> next_row{0};
+        std::exception_ptr insertion_error;
+        std::mutex insertion_error_mutex;
+        auto insert_rows = [&]() {
+            while (!insertion_failed.load(std::memory_order_relaxed)) {
+                const uint64_t row =
+                    next_row.fetch_add(1, std::memory_order_relaxed);
+                if (row >= count) {
+                    break;
+                }
+                try {
+                    index.addPoint(
+                        batch.data() + row * base_header.dim,
+                        static_cast<Label>(inserted + row));
+                } catch (...) {
+                    bool expected = false;
+                    if (insertion_failed.compare_exchange_strong(
+                            expected, true, std::memory_order_relaxed)) {
+                        std::lock_guard<std::mutex> lock(insertion_error_mutex);
+                        insertion_error = std::current_exception();
+                    }
+                }
+            }
+        };
+
+        std::vector<std::thread> workers;
+        const int worker_count =
+            static_cast<int>(std::min<uint64_t>(count, insertion_threads));
+        workers.reserve(static_cast<size_t>(worker_count - 1));
+        try {
+            for (int thread_id = 1; thread_id < worker_count; ++thread_id) {
+                workers.emplace_back(insert_rows);
+            }
+        } catch (...) {
+            insertion_failed.store(true, std::memory_order_relaxed);
+            for (auto& worker : workers) {
+                worker.join();
+            }
+            throw;
+        }
+        insert_rows();
+        for (auto& worker : workers) {
+            worker.join();
+        }
+        if (insertion_error) {
+            std::rethrow_exception(insertion_error);
         }
         inserted += count;
         const double elapsed =
@@ -424,7 +586,7 @@ void run_build(const Options& options) {
               << " M=" << m
               << " ef_construction=" << ef_construction
               << " preprocess_threads=" << threads
-              << " insertion_threads=1"
+              << " insertion_threads=" << insertion_threads
               << " total_s=" << std::fixed << std::setprecision(6) << total_seconds
               << " save_s=" << save_seconds
               << " index_bytes=" << fs::file_size(index_path) << std::endl;

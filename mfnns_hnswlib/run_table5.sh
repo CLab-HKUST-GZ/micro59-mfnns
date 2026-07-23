@@ -2,15 +2,25 @@
 set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CACHE_ROOT="${TABLE5_CACHE_ROOT:-/hpc2hdd/home/rmeng603/workspace/MFANNS/recall_analysis/memory/vectordb_recall_20260320_n1000/cache}"
-OUTPUT_DIR="${TABLE5_OUTPUT_DIR:-${PROJECT_ROOT}/artifacts/table5_reproduction}"
-BUILD_DIR="${TABLE5_BUILD_DIR:-/tmp/mfnns_hnswlib_table5_build}"
+CACHE_ROOT_REL="${TABLE5_CACHE_ROOT:-../../MFANNS/recall_analysis/memory/vectordb_recall_20260320_n1000/cache}"
+INDEX_ROOT_REL="${TABLE5_INDEX_ROOT:-cpu_index}"
+OUTPUT_DIR_REL="${TABLE5_OUTPUT_DIR:-artifacts/table5_reproduction}"
+BUILD_DIR_REL="${TABLE5_BUILD_DIR:-build}"
 JOBS="${TABLE5_JOBS:-1}"
 THREADS="${TABLE5_THREADS:-8}"
 QUERY_LIMIT="${TABLE5_QUERY_LIMIT:-1000}"
 K="${TABLE5_K:-10}"
 EF="${TABLE5_EF:-500}"
 RISK_RATIO="${TABLE5_RISK_RATIO:-1.0073}"
+
+require_relative_path() {
+  local name="$1"
+  local value="$2"
+  if [[ -z "${value}" || "${value}" == /* ]]; then
+    echo "${name} must be a non-empty path relative to the repository root: ${value}" >&2
+    exit 2
+  fi
+}
 
 require_positive_integer() {
   local name="$1"
@@ -20,6 +30,16 @@ require_positive_integer() {
     exit 2
   fi
 }
+
+require_relative_path TABLE5_CACHE_ROOT "${CACHE_ROOT_REL}"
+require_relative_path TABLE5_INDEX_ROOT "${INDEX_ROOT_REL}"
+require_relative_path TABLE5_OUTPUT_DIR "${OUTPUT_DIR_REL}"
+require_relative_path TABLE5_BUILD_DIR "${BUILD_DIR_REL}"
+
+CACHE_ROOT="${PROJECT_ROOT}/${CACHE_ROOT_REL}"
+INDEX_ROOT="${PROJECT_ROOT}/${INDEX_ROOT_REL}"
+OUTPUT_DIR="${PROJECT_ROOT}/${OUTPUT_DIR_REL}"
+BUILD_DIR="${PROJECT_ROOT}/${BUILD_DIR_REL}"
 
 require_positive_integer TABLE5_JOBS "${JOBS}"
 require_positive_integer TABLE5_THREADS "${THREADS}"
@@ -44,11 +64,12 @@ DATASETS=(
 
 for spec in "${DATASETS[@]}"; do
   read -r dataset variant <<<"${spec}"
-  dataset_dir="${CACHE_ROOT}/${dataset}/${variant}"
+  cache_dir="${CACHE_ROOT}/${dataset}/${variant}"
+  index_dir="${INDEX_ROOT}/${dataset}/${variant}"
   for required in \
-    "${dataset_dir}/hnsw_index_M32_ef100.bin" \
-    "${dataset_dir}/query_vectors_n1000_seed42.bin" \
-    "${dataset_dir}/gt_labels_topk${K}_n1000_seed42.bin"; do
+    "${index_dir}/hnsw_index_M32_ef100.bin" \
+    "${cache_dir}/query_vectors_n1000_seed42.bin" \
+    "${cache_dir}/gt_labels_topk${K}_n1000_seed42.bin"; do
     if [[ ! -r "${required}" ]]; then
       echo "Missing readable Table 5 input: ${required}" >&2
       exit 2
@@ -98,6 +119,7 @@ for spec in "${DATASETS[@]}"; do
   (
     "${TOOL}" \
       --cache-root "${CACHE_ROOT}" \
+      --index-root "${INDEX_ROOT}" \
       --dataset "${dataset}" \
       --variant "${variant}" \
       --output "${DATASET_OUTPUT_DIR}/${name}.csv" \

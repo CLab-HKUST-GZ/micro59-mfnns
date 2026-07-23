@@ -12,16 +12,30 @@ Table 5. It reproduces:
 The implementation uses the bundled MFANNS HNSW headers. It does not require
 the historical Python extension, NumPy, or Faiss.
 
-## Required cache layout
+## Required cache and index layout
 
-Set `TABLE5_CACHE_ROOT` to a directory with the following structure:
+Set `TABLE5_CACHE_ROOT` to a repository-relative directory containing cached
+queries and ground truth:
 
 ```text
 <cache-root>/<dataset>/<variant>/
-  hnsw_index_M32_ef100.bin
   query_vectors_n1000_seed42.bin
   gt_labels_topk10_n1000_seed42.bin
 ```
+
+Indexes are read separately from `TABLE5_INDEX_ROOT`, which defaults to the
+tracked `cpu_index` directory:
+
+```text
+cpu_index/<dataset>/<variant>/
+  hnsw_index_M32_ef100.bin
+```
+
+Create all seven required CPU indexes with
+`script/cpu_index_build.sh deep10m/normalized glove2m/normalized pubmed/raw
+sift1m/normalized t2i1m/normalized w2v1m/normalized wiki1m/normalized`.
+The same script also supports all raw CPU-cache variants and the two 1B
+datasets.
 
 The query and ground-truth files use a little-endian matrix format:
 
@@ -49,9 +63,10 @@ The paper configuration is fixed by default to 1,000 cached queries,
 Useful overrides:
 
 ```bash
-TABLE5_CACHE_ROOT=/path/to/cache \
-TABLE5_OUTPUT_DIR=/path/to/output \
-TABLE5_BUILD_DIR=/tmp/mfnns_table5_build \
+TABLE5_CACHE_ROOT=data/table5_cache \
+TABLE5_INDEX_ROOT=cpu_index \
+TABLE5_OUTPUT_DIR=artifacts/table5_output \
+TABLE5_BUILD_DIR=build \
 TABLE5_JOBS=7 \
 TABLE5_THREADS=8 \
 ./run_table5.sh

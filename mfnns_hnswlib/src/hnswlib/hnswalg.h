@@ -917,8 +917,9 @@ class HierarchicalNSW : public AlgorithmInterface<dist_t> {
         tableint next_closest_entry_point = selectedNeighbors.back();
 
         {
-            // lock only during the update
-            // because during the addition the lock for cur_c is already acquired
+            // Updates do not already own the current node's lock. New
+            // insertions hold it until all levels have been published, so
+            // another insertion cannot observe a partially initialized node.
             std::unique_lock <std::mutex> lock(link_list_locks_[cur_c], std::defer_lock);
             if (isUpdate) {
                 lock.lock();
@@ -1580,7 +1581,6 @@ class HierarchicalNSW : public AlgorithmInterface<dist_t> {
             label_lookup_[label] = cur_c;
         }
 
-        std::unique_lock <std::mutex> lock_el(link_list_locks_[cur_c]);
         int curlevel = getRandomLevel(mult_);
         if (level > 0)
             curlevel = level;
@@ -1591,6 +1591,11 @@ class HierarchicalNSW : public AlgorithmInterface<dist_t> {
         int maxlevelcopy = maxlevel_;
         if (curlevel <= maxlevelcopy)
             templock.unlock();
+        // The global lock (when needed) is always acquired before the new
+        // node lock. This order avoids the former node -> global / global ->
+        // node cycle while keeping the new node private until construction
+        // of every level is complete.
+        std::unique_lock <std::mutex> lock_el(link_list_locks_[cur_c]);
         tableint currObj = enterpoint_node_;
         tableint enterpoint_copy = enterpoint_node_;
 

@@ -1,5 +1,5 @@
 CXX ?= g++
-BUILD_DIR ?= /tmp/mfnns_hnswlib_build
+BUILD_DIR ?= build
 TARGET := $(BUILD_DIR)/mfnns_hnsw_tool
 SOURCE := src/mfnns_hnsw_tool.cpp
 TABLE5_TARGET := $(BUILD_DIR)/table5_dataset_runner
@@ -10,9 +10,11 @@ CXXFLAGS ?= -O3 -DNDEBUG
 REQUIRED_CXXFLAGS := -std=c++17 -fopenmp -march=native -Wall -Wextra -Wpedantic
 LDLIBS += -pthread
 
-.PHONY: all clean table5
+.PHONY: all clean table5 tool
 
 all: $(TARGET) $(TABLE5_TARGET)
+
+tool: $(TARGET)
 
 table5: $(TABLE5_TARGET)
 

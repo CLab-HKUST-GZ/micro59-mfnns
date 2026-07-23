@@ -24,6 +24,7 @@ namespace {
 
 struct Options {
     fs::path cache_root;
+    fs::path index_root;
     std::string dataset;
     std::string variant;
     fs::path output;
@@ -96,7 +97,8 @@ void print_usage(std::ostream& out) {
     out
         << "Usage: table5_dataset_runner [options]\n\n"
         << "Required:\n"
-        << "  --cache-root PATH   Root containing dataset/variant cache directories\n"
+        << "  --cache-root PATH   Root containing cached queries and ground truth\n"
+        << "  --index-root PATH   Root containing dataset/variant HNSW indexes\n"
         << "  --dataset NAME      Dataset cache name\n"
         << "  --variant NAME      Dataset variant\n"
         << "  --output PATH       One-row detail CSV output\n\n"
@@ -122,7 +124,8 @@ Options parse_options(int argc, char** argv) {
         values[arg.substr(2)] = argv[++i];
     }
 
-    for (const auto& required : {"cache-root", "dataset", "variant", "output"}) {
+    for (const auto& required :
+         {"cache-root", "index-root", "dataset", "variant", "output"}) {
         if (values.find(required) == values.end()) {
             fail("Missing required option --" + std::string(required));
         }
@@ -130,6 +133,7 @@ Options parse_options(int argc, char** argv) {
 
     Options options;
     options.cache_root = values.at("cache-root");
+    options.index_root = values.at("index-root");
     options.dataset = values.at("dataset");
     options.variant = values.at("variant");
     options.output = values.at("output");
@@ -385,13 +389,15 @@ void print_mode(const std::string& name, const SearchResult& result) {
 int main(int argc, char** argv) {
     try {
         const Options options = parse_options(argc, argv);
-        const fs::path dataset_dir =
+        const fs::path cache_dir =
             options.cache_root / options.dataset / options.variant;
-        const fs::path index_path = dataset_dir / "hnsw_index_M32_ef100.bin";
+        const fs::path index_dir =
+            options.index_root / options.dataset / options.variant;
+        const fs::path index_path = index_dir / "hnsw_index_M32_ef100.bin";
         const fs::path query_path =
-            dataset_dir / "query_vectors_n1000_seed42.bin";
+            cache_dir / "query_vectors_n1000_seed42.bin";
         const fs::path gt_path =
-            dataset_dir /
+            cache_dir /
             ("gt_labels_topk" + std::to_string(options.k) +
              "_n1000_seed42.bin");
 
