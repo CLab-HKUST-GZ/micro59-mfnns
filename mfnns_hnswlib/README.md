@@ -9,8 +9,8 @@ command-line tool for:
 - computing exact L2 ground truth and measuring recall loss for FP32, FP16,
   FPMA, FP8, INT16, and INT8 distance modes.
 
-The repository contains source and small text test records only. Datasets,
-indexes, binaries, and generated artifacts are intentionally excluded.
+The repository contains source and documentation only. Datasets, indexes,
+binaries, and generated artifacts are intentionally excluded.
 
 ## Requirements
 
@@ -100,22 +100,6 @@ ground truth. For each precision mode it reports:
 - query time and QPS.
 
 FP32 is always evaluated first, even if omitted from `--precisions`.
-
-## T2I-1M validation
-
-The checked-in validation record is under
-[`memory/001_t2i1m_validation`](memory/001_t2i1m_validation/TEST_RECORD.md).
-It covers:
-
-- a fresh normalized 20K-vector T2I subset index;
-- exact recall evaluation of that index;
-- loading and evaluating an existing complete one-million-vector T2I index;
-- repeat-build SHA-256 determinism;
-- GCC, Clang, and ThreadSanitizer checks.
-
-The validation script is environment-specific because it records the original
-HPC dataset paths. For a new environment, use
-[`scripts/run_t2i1m_smoke.sh`](scripts/run_t2i1m_smoke.sh).
 
 ## Source provenance and license
 
