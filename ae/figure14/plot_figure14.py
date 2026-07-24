@@ -66,6 +66,19 @@ DESIGN_COLORS = {
     "ndp_et": "#d28a45",
     "mfnns": "#ebd3a7",
 }
+K5_K10_SIM_DESIGNS = {
+    "cpu",
+    "ansmet",
+    "ndp_base",
+    "ndp_fpma",
+    "ndp_et",
+    "mfnns",
+}
+K5_K10_FPMA_FALLBACKS = {
+    ("k5", "pubmed", "ndp_fpma"),
+    ("k10", "wiki1m", "ndp_fpma"),
+    ("k10", "pubmed", "ndp_fpma"),
+}
 
 FIGURE_WIDTH_IN = 7.16
 FIGURE_HEIGHT_IN = 1.2
@@ -144,10 +157,58 @@ def validate(
             raise ValueError(
                 f"speedup mismatch for {key}: exported={speedup}, calculated={calculated}"
             )
-        for field in ("stats_ref", "run_ref"):
+        for field in ("stats_ref", "config_ref", "run_ref"):
             reference = row.get(field, "")
             if reference and Path(reference).is_absolute():
                 raise ValueError(f"absolute {field} for {key}: {reference}")
+
+    for top_k in TOPK_ORDER:
+        for dataset, _ in DATASET_ORDER:
+            cpu_qps = float(lookup[(top_k, dataset, "cpu")]["qps"])
+            for design in DESIGN_ORDER:
+                row = lookup[(top_k, dataset, design)]
+                if not math.isclose(
+                    float(row["cpu_qps"]), cpu_qps, rel_tol=0, abs_tol=1e-12
+                ):
+                    raise ValueError(
+                        f"mixed CPU normalization baseline: {(top_k, dataset, design)}"
+                    )
+
+    for key, row in lookup.items():
+        if key[0] not in {"k5", "k10"} or key[2] not in K5_K10_SIM_DESIGNS:
+            continue
+        if float(row["recall"]) <= 0.895:
+            raise ValueError(f"k=5/10 simulator row fails recall gate: {key}")
+        config_ref = row["config_ref"]
+        if not config_ref or not (SCRIPT_DIR.parents[1] / config_ref).is_file():
+            raise ValueError(f"missing portable final YAML for {key}: {config_ref}")
+
+    direct_fpma = {
+        key
+        for key, row in lookup.items()
+        if key[0] in {"k5", "k10"}
+        and key[2] == "ndp_fpma"
+        and row["data_status"] in {"measured_reused", "measured_completion"}
+    }
+    expected_direct_fpma = {
+        (top_k, dataset, "ndp_fpma")
+        for top_k in ("k5", "k10")
+        for dataset, _ in DATASET_ORDER
+    } - K5_K10_FPMA_FALLBACKS
+    if direct_fpma != expected_direct_fpma:
+        raise ValueError(
+            "direct k=5/10 NDP-FPMA set differs: "
+            f"missing={sorted(expected_direct_fpma-direct_fpma)}, "
+            f"extra={sorted(direct_fpma-expected_direct_fpma)}"
+        )
+    for key in K5_K10_FPMA_FALLBACKS:
+        copied_row = lookup[key]
+        base_row = lookup[(key[0], key[1], "ndp_base")]
+        if copied_row["data_status"] != "derived_copy_from_ndp_base":
+            raise ValueError(f"cancelled NDP-FPMA row is not marked derived: {key}")
+        for field in ("qps", "recall", "cpu_qps", "qps_speedup_vs_cpu"):
+            if float(copied_row[field]) != float(base_row[field]):
+                raise ValueError(f"cancelled NDP-FPMA {field} differs from base: {key}")
 
     measured = lookup[("k100", "glove2m", "ndp_base")]
     copied = lookup[("k100", "glove2m", "ndp_fpma")]
@@ -382,7 +443,10 @@ def main() -> int:
     rows = load_rows(args.data)
     lookup = validate(rows)
     metrics = summary_metrics(lookup)
-    print("DATA_OK rows=168 measured_glove2m_k100_ndp_base_qps=3418.924211")
+    print(
+        "DATA_OK rows=168 latest_k5_k10_sim=84 direct_fpma=11 "
+        "fpma_fallback=3 measured_glove2m_k100_ndp_base_qps=3418.924211"
+    )
     for metric, scope, value in metrics:
         print(f"{metric}[{scope}]={value:.6f}")
     if not args.check_only:
