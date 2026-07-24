@@ -5,7 +5,7 @@ set -euo pipefail
 task_usage() {
     cat <<'EOF'
 Usage:
-  script/gpu_index_build.sh \
+  script/cagra_index_build.sh \
     --base BASE.bin \
     --dataset-name NAME \
     --cache-dir DIR \
@@ -38,7 +38,7 @@ Environment:
 
 Example (the unified Wiki k=100 graph parameters):
   CAGRA_PYTHON=/path/to/cuvs-env/bin/python \
-  script/gpu_index_build.sh \
+  script/cagra_index_build.sh \
     --base /path/to/wiki_base.normalized.fbin \
     --dataset-name wiki \
     --cache-dir /path/to/cagra_cache \
