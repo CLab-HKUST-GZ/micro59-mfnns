@@ -89,9 +89,9 @@ runMain MFNNS.Testing.OverallFunctionalTest
 A successful complete run ends with:
 
 ```text
-✓ Functional test stages completed     : 3 / 3
-✓ Overall bit-exact comparisons passed : 184,320 / 184,320
-✓ OVERALL PASS: ALL MFNNS FP16 FUNCTIONAL VERIFICATION TESTS PASSED
+[PASS] Functional test stages completed     : 3 / 3
+[PASS] Overall bit-exact comparisons passed : 184,320 / 184,320
+[PASS] OVERALL: ALL MFNNS FP16 FUNCTIONAL VERIFICATION TESTS PASSED
 ```
 
 
