@@ -10,6 +10,26 @@ The reproducible index builders are under `script/`:
 
 Run `script/bang_index_build.sh --help` for the complete option list.
 
+## GPU baseline workspace
+
+`GPU_Baseline/` provides a repository-local, per-dataset index layout for the
+seven reproduced datasets. Its BANG and CAGRA entry points are relative links
+to the canonical builders above, while machine-specific builder/Python links
+and every generated index are ignored by Git.
+
+Start with:
+
+```bash
+GPU_Baseline/configure.sh \
+  --bang-builder /path/to/build_disk_index \
+  --cagra-python /path/to/cuvs-env/bin/python
+GPU_Baseline/configure.sh --check
+GPU_Baseline/build_index.sh --list
+```
+
+See `GPU_Baseline/README.md` for the layout, build commands, and node-local
+SSD override.
+
 ## BANG builder prerequisites
 
 `bang_index_build.sh` requires:

@@ -1,0 +1,1 @@
+../../script/bang_index_build.sh

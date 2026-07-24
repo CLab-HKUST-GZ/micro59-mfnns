@@ -1,0 +1,1 @@
+../../script/cagra_index_build.sh
