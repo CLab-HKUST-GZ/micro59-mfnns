@@ -18,9 +18,9 @@ object Config {
       clockEdge = RISING,
       resetActiveLevel = LOW
     ),
-    onlyStdLogicVectorAtTopLevelIo = true, // what is this for?
-    nameWhenByFile = false, // the generated Verilog codes will not have those "when_" wires
-    anonymSignalPrefix = "tmp" // use "tmp_" instead of "_zz_"
+    onlyStdLogicVectorAtTopLevelIo = true,
+    nameWhenByFile = false,                   // the generated Verilog codes will not have those "when_" wires
+    anonymSignalPrefix = "tmp"                // use "tmp_" instead of "_zz_"
     // oneFilePerComponent = true,
   )
 
