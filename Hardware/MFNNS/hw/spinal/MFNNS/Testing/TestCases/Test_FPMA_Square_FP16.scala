@@ -180,9 +180,7 @@ object Test_FPMA_Square_FP16 {
         s"x=${TU.hex16(inputBits)} ($inputValue)"
     val dutColumn = s"[DUT] R=${TU.hex16(actualBits)} ($actualValue)"
     val goldenColumn = s"[Golden] R=${TU.hex16(expectedBits)} ($expectedValue)"
-    val checkColumn =
-      if (actualBits == expectedBits) "\u001B[32m\u2713 PASS\u001B[0m"
-      else "\u001B[31m\u2717 FAIL\u001B[0m"
+    val checkColumn = TU.checkResult(actualBits == expectedBits)
 
     printf(
       "%-16s | %-64s | %-33s | %-36s | [Check] %s\n",
@@ -200,7 +198,7 @@ object Test_FPMA_Square_FP16 {
     val passed = formatCount(stats.passed)
     val failures = formatCount(stats.failures)
     val passRate = stats.passed.toDouble * 100.0 / stats.total
-    val check = s"$Green\u2713$ResetColor"
+    val check = s"$Green[PASS]$ResetColor"
 
     println("=" * FinalSummaryWidth)
     println("[FINAL RESULT] FPMA_Square_FP16 Exhaustive Normal-Square Bit-Exact Verification")
@@ -217,7 +215,7 @@ object Test_FPMA_Square_FP16 {
     println(s"  $check DUT/Golden mismatches     : $failures")
     println(f"  $check Final pass rate           : $passRate%.3f%%")
     println("-" * FinalSummaryWidth)
-    println(s"  $BoldGreen\u2713 PASS: ALL $expected NORMAL-SQUARE CASES MATCHED THE GOLDEN MODEL$ResetColor")
+    println(s"  $BoldGreen[PASS] ALL $expected NORMAL-SQUARE CASES MATCHED THE GOLDEN MODEL$ResetColor")
     println("=" * FinalSummaryWidth)
   }
 

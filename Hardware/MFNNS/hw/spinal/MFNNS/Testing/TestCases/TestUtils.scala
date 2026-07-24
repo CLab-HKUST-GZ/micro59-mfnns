@@ -8,6 +8,14 @@ object TU {
 
   private val FP16Mask = 0xffff
 
+  def checkResult(isCorrect: Boolean): String = {
+    if (isCorrect) {
+      "\u001B[32mCorrect\u001B[0m"
+    } else {
+      "\u001B[31mIncorrect\u001B[0m"
+    }
+  }
+
   def hex16(bits: Int): String = {
     requireFP16Bits(bits)
     f"0x$bits%04x"

@@ -207,9 +207,7 @@ object Test_FPMA_Square_FP16_CrossValidation {
         s"x=${TU.hex16(inputBits)} ($inputValue)"
     val fpmaColumn = s"[FPMA(x,x)] R=${TU.hex16(fpmaBits)} ($fpmaValue)"
     val squareColumn = s"[Square-FPMA] R=${TU.hex16(squareBits)} ($squareValue)"
-    val checkColumn =
-      if (fpmaBits == squareBits) "\u001B[32m\u2713 BIT-EXACT MATCH\u001B[0m"
-      else "\u001B[31m\u2717 MISMATCH\u001B[0m"
+    val checkColumn = TU.checkResult(fpmaBits == squareBits)
 
     printf(
       "%-16s | %-58s | %-39s | %-41s | [Cross-check] %s\n",
@@ -229,7 +227,7 @@ object Test_FPMA_Square_FP16_CrossValidation {
     val passed = formatCount(stats.passed)
     val failures = formatCount(stats.failures)
     val passRate = stats.passed.toDouble * 100.0 / stats.total
-    val check = s"$Green\u2713$ResetColor"
+    val check = s"$Green[PASS]$ResetColor"
 
     println("=" * FinalSummaryWidth)
     println("[FINAL RESULT] FPMA vs Square-FPMA Exhaustive RTL-to-RTL Cross-Validation")
@@ -250,7 +248,7 @@ object Test_FPMA_Square_FP16_CrossValidation {
     println(f"  $check Final pass rate          : $passRate%.3f%%")
     println("-" * FinalSummaryWidth)
     println(
-      s"  $BoldGreen\u2713 PASS: SQUARE-FPMA IS BIT-EXACTLY EQUIVALENT TO FPMA(x,x) " +
+      s"  $BoldGreen[PASS] SQUARE-FPMA IS BIT-EXACTLY EQUIVALENT TO FPMA(x,x) " +
         s"FOR ALL $expected NORMAL INPUTS$ResetColor"
     )
     println("=" * FinalSummaryWidth)

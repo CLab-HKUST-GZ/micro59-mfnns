@@ -56,8 +56,8 @@ object OverallFunctionalTest extends App {
 
     println()
     println(
-      s"$BoldGreen[FUNCTIONAL TEST $index/$FunctionalTestCount COMPLETE] " +
-        s"\u2713 PASS: ${formatCount(CasesPerTest)} / ${formatCount(CasesPerTest)} cases$ResetColor"
+      s"$BoldGreen[PASS] FUNCTIONAL TEST $index/$FunctionalTestCount COMPLETE: " +
+        s"${formatCount(CasesPerTest)} / ${formatCount(CasesPerTest)} cases$ResetColor"
     )
   }
 
@@ -76,7 +76,7 @@ object OverallFunctionalTest extends App {
   }
 
   private def printOverallSummary(): Unit = {
-    val check = s"$Green\u2713$ResetColor"
+    val check = s"$Green[PASS]$ResetColor"
     val casesPerTest = formatCount(CasesPerTest)
     val goldenChecks = formatCount(GoldenModelCheckCount)
     val directChecks = formatCount(DirectRtlCrossCheckCount)
@@ -99,7 +99,7 @@ object OverallFunctionalTest extends App {
     println(s"  $check Functional test stages completed     : $FunctionalTestCount / $FunctionalTestCount")
     println(s"  $check Overall bit-exact comparisons passed : $overallChecks / $overallChecks")
     println("-" * SummaryWidth)
-    println(s"  $BoldGreen\u2713 OVERALL PASS: ALL MFNNS FP16 FUNCTIONAL VERIFICATION TESTS PASSED$ResetColor")
+    println(s"  $BoldGreen[PASS] OVERALL: ALL MFNNS FP16 FUNCTIONAL VERIFICATION TESTS PASSED$ResetColor")
     println("=" * SummaryWidth)
   }
 
