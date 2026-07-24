@@ -1,0 +1,7 @@
+method,source_design,area_mm2,derivation_note
+ANSMET,ansmet,0.020913242,Measured Figure 14 QPS
+NMP-Base,ndp_base,0.020913242,Measured Figure 14 QPS
+NMP-FPMA,ndp_fpma,0.01208361,Use current Figure 14 NMP-FPMA QPS
+NMP-FPSA,ndp_fpma,0.009678554,Derived: reuse current Figure 14 NMP-FPMA QPS
+NMP-Base-ET,mfnns,0.020913242,Derived: reuse current Figure 14 MFNNS QPS and NMP-Base area
+MFNNS,mfnns,0.009678554,Measured Figure 14 QPS

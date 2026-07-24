@@ -7,6 +7,8 @@ and provenance notes.
 Current coverage:
 
 - `figure14/`: throughput comparison for k=5, k=10, and k=100.
+- `figure15/`: Recall@10 area-efficiency comparison derived from the canonical
+  Figure 14 QPS table and synthesized DPE areas.
 
 Simulator configurations and their execution evidence remain under
 `simulator/run_case/`; the `ae/` copy is the compact plotting interface.

@@ -1,0 +1,12 @@
+metric	exact_value	display_or_dataset
+mfnns_vs_ansmet_geomean	3.184820410251080	3.18x
+mfnns_vs_ansmet_min	2.310482217800963	sift1m
+mfnns_vs_ansmet_max	4.803015115836883	pubmed
+nmp_fpma_vs_nmp_base_geomean	1.730711434745080	1.73x
+nmp_fpsa_vs_nmp_fpma_geomean	1.248493318320071	1.25x
+mfnns_vs_nmp_fpsa_geomean	2.064288747239976	2.06x
+mfnns_vs_nmp_base_et_geomean	2.160781662219377	2.16x
+source_recall_min	0.895700000000000	-
+source_recall_max	0.934200000000000	-
+ndp_fpma_direct_count	5	-
+ndp_fpma_fallback_count	2	-
