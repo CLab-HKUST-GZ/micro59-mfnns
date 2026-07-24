@@ -7,7 +7,7 @@ Frontend:
   stat_path: simulator/run_case/figure14_recall_gt0895/results/k5/wiki1m/mfnns_stats.yml
   nDim: 768
   vDimSize: 768
-  ef_search: 18
+  ef_search: 17
   traversalMemAcc: true
   nQueryLimit: 1000
   nParallelQuery: 1000
@@ -54,8 +54,8 @@ Frontend:
   allowoutlier: false
   outlier_burden: false
   dimbitMode: dimFirst
-  dualQueueLowerBoundQueueSize: 50
-  dualQueueLowerBoundWarmupSize: 49
+  dualQueueLowerBoundQueueSize: 30
+  dualQueueLowerBoundWarmupSize: 29
   mfnnsEnable: true
   vectorLogicalLayout: global_coarse_fine_split
   vectorPhysicalPlacement: toplayer_replicated
