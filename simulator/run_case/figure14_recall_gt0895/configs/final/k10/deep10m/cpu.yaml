@@ -1,0 +1,68 @@
+Frontend:
+  impl: HNSWTraversalUnit
+  model_path: mfnns_hnswlib/cpu_index/deep10m/hnsw_index_M32_ef100.bin
+  query_path: mfnns_hnswlib/cpu_index/deep10m/query_vectors_n1000_seed42.bin
+  gt_path: mfnns_hnswlib/cpu_index/deep10m/gt_labels_topk10_n1000_seed42.bin
+  gt_k: 10
+  stat_path: simulator/run_case/figure14_recall_gt0895/results/k10/deep10m/cpu_stats.yml
+  nDim: 96
+  vDimSize: 96
+  ef_search: 15
+  traversalMemAcc: true
+  nQueryLimit: 1000
+  nParallelQuery: 1000
+  nEmbUnit: 32
+  enableLogging: false
+  earlyExitEnable: false
+  allowSample: false
+  allowoutlier: false
+  outlier_burden: false
+  dimbitMode: dimFirst
+  datatype: isFloat
+  dataunsigned: false
+  spacetype: L2
+  limit_bs_num: true
+  bs_num: 2
+  dimStep: 32
+  bitStep: 16
+  bitStep_trav1: 8
+  bitStep_trav2: 8
+  outlier_percentage: 0.002
+  arrayValues:
+  - 10
+  - 2
+  resProbeEpoch: 25
+  k_neighbors: 10
+  Frontend:
+    impl: HNSWEmbUnit
+    nParallelDisReq: 32
+    nParallelPDisReq: 1
+    nDim: 96
+    earlyExitEnable: false
+    dimbitMode: dimFirst
+    enableLogging: false
+MemorySystem:
+  impl: MultiGenericDRAM
+  clock_ratio: 3
+  nMemory: 1
+  assignMethod: random
+  DRAM:
+    impl: DDR4
+    org:
+      preset: DDR4_8Gb_x8
+      channel: 4
+      rank: 2
+    timing:
+      preset: DDR4_3200W
+  Controller:
+    impl: Generic
+    Scheduler:
+      impl: FRFCFS
+    RefreshManager:
+      impl: AllBank
+    RowPolicy:
+      impl: ClosedRowPolicy
+      cap: 4
+    plugins: null
+  AddrMapper:
+    impl: RoBaRaCoCh

@@ -1,0 +1,11 @@
+metric	scope	value
+mfnns_vs_cpu	all_21_points	26.742470352249
+mfnns_vs_bang	all_21_points	16.478215241148
+mfnns_vs_gpu_cagra	all_21_points	1.810480046984
+mfnns_vs_ansmet	all_21_points	1.820673765722
+ndp_et_vs_ndp_fpma	k5	1.524929179688
+mfnns_vs_ndp_et	k5	1.188863630574
+ndp_et_vs_ndp_fpma	k10	1.620585193581
+mfnns_vs_ndp_et	k10	1.161266501462
+ndp_et_vs_ndp_fpma	k100	3.322028953719
+mfnns_vs_ndp_et	k100	1.064935360537
