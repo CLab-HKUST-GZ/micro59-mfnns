@@ -7,7 +7,6 @@ import MFNNS.Testing.GoldenModels.FPMA_Square_FP16_Golden
 import scala.language.reflectiveCalls
 import scala.util.Random
 
-
 object Test_FPMA_Square_FP16 {
 
   private val SignCount = 2
@@ -45,8 +44,7 @@ object Test_FPMA_Square_FP16 {
     val representativeSeen = Array.fill(ExpectedRepresentativeCount)(false)
     val stats = new TU.TestStats("FPMA_Square_FP16 normal-square bit-exact test")
 
-    SimConfig
-      .withConfig(Config.spinal)
+    Config.sim
       .compile(FPMA_Square_FP16())
       .doSim("Test_FPMA_Square_FP16") { dut =>
         for {

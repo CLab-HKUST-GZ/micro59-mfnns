@@ -8,7 +8,6 @@ import MFNNS.SquareFPMA.FPMA_Square_FP16
 import scala.language.reflectiveCalls
 import scala.util.Random
 
-
 case class FPMA_Square_FP16_CrossDut() extends Component {
   val io = new Bundle {
     val FP16_In = in Bits (16 bits)
@@ -67,8 +66,7 @@ object Test_FPMA_Square_FP16_CrossValidation {
     val representativeSeen = Array.fill(ExpectedRepresentativeCount)(false)
     val stats = new TU.TestStats("FPMA_Square_FP16 vs FPMA_FP16(x,x) RTL cross-validation")
 
-    SimConfig
-      .withConfig(Config.spinal)
+    Config.sim
       .compile(FPMA_Square_FP16_CrossDut())
       .doSim("Test_FPMA_Square_FP16_CrossValidation") { dut =>
         for {
