@@ -44,3 +44,19 @@ repository-relative `stat_path`.
 `manifests/k100_sources.tsv` records the k=100 Figure/source mapping. The seven
 NMP-FPMA k=100 rows are derived from the documented NMP-Base timing model and
 must not be interpreted as direct NMP-FPMA measurements.
+
+## Figure 14 k=5/10 result policy
+
+The portable Figure 14 data uses 81 completed k=5/10 simulator measurements,
+all with strict `recall > 0.895`. Eleven NMP-FPMA points use direct test
+results. The following three direct jobs were cancelled:
+
+- k=5 / PubMed / NMP-FPMA;
+- k=10 / Wiki1M / NMP-FPMA;
+- k=10 / PubMed / NMP-FPMA.
+
+Their YAMLs remain in the runnable 126-case matrix. Until those three YAMLs
+produce direct stats, the plot explicitly copies the latest NMP-Base metrics
+for the same `(k, dataset)` and marks them as derived. The selected values,
+stats hashes, and final-YAML references are recorded in
+`ae/figure14/data/k5_k10_latest_metrics.csv`.

@@ -16,9 +16,13 @@ Requirements are Python 3, Matplotlib, and NumPy. The command:
 
 1. validates the exact 3 top-k × 7 dataset × 8 design matrix;
 2. verifies that all data references are repository/workspace relative;
-3. verifies the newly measured GloVe2M k=100 NMP-Base point;
-4. keeps the NMP-FPMA point marked as a derived copy with no direct test;
-5. writes `output/figure14.pdf`, `output/figure14.png`, and
+3. verifies all 84 k=5/10 simulator rows satisfy strict `recall > 0.895`;
+4. verifies 11 direct NDP-FPMA measurements and exactly three explicit
+   NDP-Base fallbacks;
+5. verifies every method is normalized with the Figure 14 CPU for the same
+   `(k, dataset)`;
+6. verifies the measured GloVe2M k=100 NMP-Base point;
+7. writes `output/figure14.pdf`, `output/figure14.png`, and
    `output/figure14_summary.tsv`.
 
 Use `--check-only` for a read-only data and metric check:
@@ -27,27 +31,30 @@ Use `--check-only` for a read-only data and metric check:
 python3 ae/figure14/plot_figure14.py --check-only
 ```
 
-## Measured-data update
+## k=5/10 selected-result update
 
-The previous plot imputed the GloVe2M k=100 NMP-Base throughput from its k=10
-speedup. A result completed later:
+The k=5/10 simulator slice now uses the selected July formal results:
 
 ```text
-s_mem_cycle = 701975198
-s_num_query = 1000
-QPS         = 1000 × 2.4e9 / 701975198 = 3418.924211
-recall@100  = 0.90294
+47 reused formal measurements
+34 completion-batch measurements
+ 3 explicit NDP-FPMA fallbacks
+84 plotted simulator rows
 ```
 
-The normalized QPS changes from `12.307665×` to `12.133526×`. The existing
-Figure 14 policy gives NMP-FPMA the same end-to-end QPS as NMP-Base because
-their modeled compute throughput is the same. Its plotted value therefore
-changes too, but it is still classified as `derived_copy_no_direct_test`; it
-must not be described as a direct NMP-FPMA measurement.
+All 81 completed measurements satisfy strict `recall > 0.895`. Eleven
+NDP-FPMA points use direct measurements. The three cancelled points—k=5
+PubMed, k=10 Wiki1M, and k=10 PubMed—copy the latest selected NDP-Base metrics
+for the same `(k, dataset)` and are marked `derived_copy_from_ndp_base`.
 
-The canonical data and raw stats are documented in
+CAGRA, BANG, and k=100 retain their measured QPS. Normalized QPS is recomputed
+against one Figure 14 CPU QPS per `(k, dataset)`, including BANG; this removes
+the previous mixed-CPU-normalizer ambiguity. The previously added measured
+GloVe2M k=100 NMP-Base result remains in use.
+
+The canonical data and source inventory are documented in
 [`data/README.md`](data/README.md). Internal paper-edit notes are intentionally
-not included in this repository package.
+not included in the remote package.
 
 ## Relation to the author workspace
 
@@ -58,6 +65,8 @@ updated in:
 MFANNS/figure/evaluation/speedup/
 ```
 
-The author-workspace generator still assembles k=5/k=10 inputs from its
-historical sources. This `ae/` bundle instead consumes the frozen 168-row CSV,
-so it does not depend on absolute cluster paths or the historical memory tree.
+The author-workspace generator consumes
+`figure14_k5_k10_latest_metrics.csv` for the six simulator designs and retains
+its historical source only for k=5/10 CAGRA QPS. The portable `ae/` plot
+consumes the frozen 168-row CSV and therefore does not require the historical
+memory tree.
