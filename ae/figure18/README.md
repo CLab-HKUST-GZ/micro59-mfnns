@@ -63,3 +63,25 @@ uses 10,000 queries.
 Timing is hardware- and load-sensitive. Compare recall--QPS frontiers under
 an equivalent exclusive or documented shared load; do not expect bit-identical
 individual timing rows.
+
+## T2I1B script
+
+scripts/run_t2i1b_mips_l2_curve.sh is the metric-compatible companion for the
+T2I1B panels. It requires a **BANG-compatible transformed 201D index**:
+base vectors must be transformed from x to [x, sqrt(R^2 - ||x||^2)], and the
+script appends a zero coordinate to each official 200D query. This makes L2
+ranking equivalent to the official maximum-inner-product labels.
+
+Set BANG_REPO, INDEX_PREFIX, QUERY_RAW, and GT_RAW, then run:
+
+~~~bash
+export BANG_REPO=/path/to/BANG-Billion-Scale-ANN
+export INDEX_PREFIX=/path/to/t2i1b_mips_l2_R64_QD32
+export QUERY_RAW=/path/to/query.public.100K.fbin
+export GT_RAW=/path/to/groundtruth.public.100K.ibin
+bash ae/figure18/scripts/run_t2i1b_mips_l2_curve.sh
+~~~
+
+The script rejects 200D index metadata. Its output is a new benchmark run and
+must not be represented as the historical Figure 18 curve until the transformed
+index provenance and resulting frontier are independently validated.
