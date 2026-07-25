@@ -16,6 +16,8 @@ Current coverage:
 - `figure21/`: T2I1M Recall@10 sensitivity to LBQueue size, with the complete
   243-case MFNNS sweep and three ANSMET upper-bound configurations.
 - `figure22/`: final Recall@10 ANSMET/MFNNS normalized latency breakdown.
+- `figure23/`: historical Recall@10 DRAM row-miss comparison with the 21
+  original simulator YAMLs and frozen plotting data.
 
 Simulator configurations and their execution evidence remain under
 `simulator/run_case/`; the `ae/` copy is the compact plotting interface.
