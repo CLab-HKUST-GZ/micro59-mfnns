@@ -1,0 +1,15 @@
+dataset_key,dataset_short,method,power_w,source_ref
+deep10m,DP,CAGRA,98.97,MFANNS/gpu_cagra/gpu_ada_6000
+deep10m,DP,BANG,22.302384341637115,MFANNS/figure/evaluation/power/data/BANG.csv
+glove2m,GV,CAGRA,143.46291666666667,MFANNS/gpu_cagra/gpu_ada_6000
+glove2m,GV,BANG,59.38699999999998,MFANNS/figure/evaluation/power/data/BANG.csv
+sift1m,SF,CAGRA,121.75533333333333,MFANNS/gpu_cagra/gpu_ada_6000
+sift1m,SF,BANG,59.41128205128213,MFANNS/figure/evaluation/power/data/BANG.csv
+t2i1m,T2I,CAGRA,133.8035294117647,MFANNS/gpu_cagra/gpu_ada_6000
+t2i1m,T2I,BANG,58.35317647058813,MFANNS/figure/evaluation/power/data/BANG.csv
+w2v1m,W2V,CAGRA,138.67176470588234,MFANNS/gpu_cagra/gpu_ada_6000
+w2v1m,W2V,BANG,64.51504273504273,MFANNS/figure/evaluation/power/data/BANG.csv
+wiki1m,WK,CAGRA,108.97190476190477,MFANNS/gpu_cagra/gpu_ada_6000
+wiki1m,WK,BANG,51.290804020100396,MFANNS/figure/evaluation/power/data/BANG.csv
+pubmed,PM,CAGRA,150.8468,MFANNS/gpu_cagra/gpu_ada_6000
+pubmed,PM,BANG,65.07776785714275,MFANNS/figure/evaluation/power/data/BANG.csv
