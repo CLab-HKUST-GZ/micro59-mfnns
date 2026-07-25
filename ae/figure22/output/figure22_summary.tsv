@@ -1,0 +1,14 @@
+metric	value
+arithmetic_mean_total_latency_reduction_pct	30.514425412371388
+geometric_mean_speedup	1.491576624114277
+arithmetic_mean_distance_computation_reduction_pct	55.381034917045675
+arithmetic_mean_data_movement_reduction_pct	18.342930319829417
+arithmetic_mean_result_collection_reduction_pct	2.435307603414346
+arithmetic_mean_index_traversal_reduction_pct	4.476814918717736
+deep10m_speedup	1.120191317157615
+glove2m_speedup	1.979887207175578
+sift1m_speedup	1.091736390633483
+t2i1m_speedup	1.406174659374178
+w2v1m_speedup	1.795474303841030
+wiki1m_speedup	1.193306952350117
+pubmed_speedup	2.251634575928239
