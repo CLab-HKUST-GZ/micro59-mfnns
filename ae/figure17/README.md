@@ -24,3 +24,10 @@ ae/figure17/output/figure17_summary.tsv
 ae/figure17/output/figure17.pdf
 ae/figure17/output/figure17.png
 ```
+
+## Inputs and YAMLs
+
+Figure 17 uses the same fixed execution-trace table and final Recall@10 YAMLs
+as Figure 16. `ae/energy_model.py` validates all 42 physical traces before
+deriving the seven plotted logical methods. `NMP-Base-ET` and MFNNS share the
+same trace and differ only in the compute-energy model.

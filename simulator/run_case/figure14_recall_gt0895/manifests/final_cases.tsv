@@ -34,7 +34,7 @@ top_k	dataset	normalization	design	ef_search	queue_size	historical_result_status
 5	wiki1m	normalized	ndp_base	20	NA	completed_bundled	reused_result	simulator/run_case/figure14_recall_gt0895/configs/final/k5/wiki1m/ndp_base.yaml
 5	wiki1m	normalized	ndp_fpma	20	NA	completed_bundled	reused_result	simulator/run_case/figure14_recall_gt0895/configs/final/k5/wiki1m/ndp_fpma.yaml
 5	wiki1m	normalized	ndp_et	18	50	completed_bundled	reused_result	simulator/run_case/figure14_recall_gt0895/configs/final/k5/wiki1m/ndp_et.yaml
-5	wiki1m	normalized	mfnns	18	50	completed_external	completion_config	simulator/run_case/figure14_recall_gt0895/configs/final/k5/wiki1m/mfnns.yaml
+5	wiki1m	normalized	mfnns	17	30	completed_external	reused_result	simulator/run_case/figure14_recall_gt0895/configs/final/k5/wiki1m/mfnns.yaml
 5	pubmed	normalized	cpu	240	NA	completed_external	completion_config	simulator/run_case/figure14_recall_gt0895/configs/final/k5/pubmed/cpu.yaml
 5	pubmed	normalized	ansmet	240	NA	completed_external	completion_config	simulator/run_case/figure14_recall_gt0895/configs/final/k5/pubmed/ansmet.yaml
 5	pubmed	normalized	ndp_base	240	NA	completed_external	completion_config	simulator/run_case/figure14_recall_gt0895/configs/final/k5/pubmed/ndp_base.yaml

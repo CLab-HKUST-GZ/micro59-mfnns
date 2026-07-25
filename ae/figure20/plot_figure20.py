@@ -601,7 +601,12 @@ def save_figure(fig: plt.Figure, save_prefix: Path) -> None:
     pdf_path = Path(f"{save_prefix}.pdf")
     png_path = Path(f"{save_prefix}.png")
     save_prefix.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(
+        pdf_path,
+        bbox_inches="tight",
+        pad_inches=0.02,
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     fig.savefig(png_path, bbox_inches="tight", pad_inches=0.02)
     print(f"Saved: {pdf_path}")
     print(f"Saved: {png_path}")

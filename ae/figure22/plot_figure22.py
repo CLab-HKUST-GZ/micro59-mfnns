@@ -386,7 +386,12 @@ def plot(rows, output_prefix):
     output_prefix.parent.mkdir(parents=True, exist_ok=True)
     pdf_path = output_prefix.with_suffix(".pdf")
     png_path = output_prefix.with_suffix(".png")
-    fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(
+        pdf_path,
+        bbox_inches="tight",
+        pad_inches=0.02,
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     fig.savefig(png_path, bbox_inches="tight", pad_inches=0.02)
     plt.close(fig)
     return pdf_path, png_path

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import re
 import shlex
 import subprocess
@@ -43,6 +44,21 @@ def parse_args() -> argparse.Namespace:
         "--result-root",
         type=Path,
         help="Required with --submit; must be memory/YYYYMMDD/NNN_name.",
+    )
+    parser.add_argument(
+        "--model-path",
+        type=Path,
+        help="Prepared HNSW index; required with --submit.",
+    )
+    parser.add_argument(
+        "--query-path",
+        type=Path,
+        help="Prepared query file; required with --submit.",
+    )
+    parser.add_argument(
+        "--gt-path",
+        type=Path,
+        help="Prepared ground-truth file; required with --submit.",
     )
     parser.add_argument("--partition", default="i96m3tu")
     parser.add_argument("--mem", default="1600G")
@@ -97,16 +113,69 @@ def validate_result_root(path: Path) -> Path:
     return resolved
 
 
-def build_command(
+def replace_path(text: str, key: str, value: Path | str) -> str:
+    pattern = re.compile(
+        rf"^(\s{{2}}{re.escape(key)}:)\s*.*$",
+        flags=re.MULTILINE,
+    )
+    updated, count = pattern.subn(
+        lambda match: f"{match.group(1)} {json.dumps(str(value))}",
+        text,
+        count=1,
+    )
+    if count != 1:
+        raise ValueError(f"Expected one top-level key {key}")
+    return updated
+
+
+def validate_inputs(args: argparse.Namespace) -> None:
+    for path, flag, label in (
+        (args.model_path, "--model-path", "model"),
+        (args.query_path, "--query-path", "query"),
+        (args.gt_path, "--gt-path", "ground truth"),
+    ):
+        if path is None:
+            raise ValueError(f"{flag} is required with --submit")
+        if not path.resolve().is_file():
+            raise FileNotFoundError(f"Missing {label} input: {path.resolve()}")
+
+
+def prepare_configs(
     selected: list[dict[str, str]],
+    args: argparse.Namespace,
+    result_root: Path,
+) -> list[Path]:
+    runtime_dir = result_root / "runtime_configs"
+    runtime_dir.mkdir(parents=True, exist_ok=False)
+    configs: list[Path] = []
+    for row in selected:
+        source = (REPO_ROOT / row["portable_config_ref"]).resolve()
+        method_dir = runtime_dir / row["method"]
+        method_dir.mkdir(parents=True, exist_ok=True)
+        destination = method_dir / source.name
+        text = source.read_text(encoding="utf-8")
+        text = replace_path(text, "model_path", args.model_path.resolve())
+        text = replace_path(text, "query_path", args.query_path.resolve())
+        text = replace_path(text, "gt_path", args.gt_path.resolve())
+        text = replace_path(
+            text,
+            "stat_path",
+            f"stats/{row['method']}/{source.stem}_stats.yml",
+        )
+        destination.write_text(text, encoding="utf-8")
+        configs.append(destination)
+    return configs
+
+
+def build_command(
+    configs: list[Path],
     args: argparse.Namespace,
     result_root: Path | None,
 ) -> list[str]:
-    configs = [str((REPO_ROOT / row["portable_config_ref"]).resolve()) for row in selected]
     command = [
         "python3",
         str(RUNNER),
-        *configs,
+        *[str(path) for path in configs],
         "--skip-build",
         "--partition",
         args.partition,
@@ -139,18 +208,35 @@ def main() -> None:
     if args.submit:
         if args.result_root is None:
             raise ValueError("--result-root is required with --submit")
+        if args.dataset is None or args.recall_tag is None:
+            raise ValueError(
+                "--dataset and --recall-tag are required with --submit so one "
+                "model/query/ground-truth set cannot be applied across panels"
+            )
+        validate_inputs(args)
         result_root = validate_result_root(args.result_root)
         result_root.mkdir(parents=True, exist_ok=False)
-    command = build_command(selected, args, result_root)
 
     verified = sum(row["config_status"] == VERIFIED_STATUS for row in selected)
     print(
         f"Selected {len(selected)} configs "
         f"({verified} verified, {len(selected)-verified} rerun-only)"
     )
+    if not args.submit:
+        for row in selected[:10]:
+            print(row["portable_config_ref"])
+        if len(selected) > 10:
+            print(f"... {len(selected) - 10} more")
+        print(
+            "Read-only selection only; pass --submit, the three input paths, "
+            "and --result-root to create runtime YAMLs and submit."
+        )
+        return
+
+    configs = prepare_configs(selected, args, result_root)
+    command = build_command(configs, args, result_root)
     print(shlex.join(command))
-    if args.submit:
-        subprocess.run(command, cwd=REPO_ROOT, check=True)
+    subprocess.run(command, cwd=REPO_ROOT, check=True)
 
 
 if __name__ == "__main__":

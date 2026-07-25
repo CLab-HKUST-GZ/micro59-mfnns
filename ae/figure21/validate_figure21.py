@@ -8,6 +8,8 @@ import hashlib
 import re
 from pathlib import Path
 
+import yaml
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SWEEP = SCRIPT_DIR / "data/figure21_sweep_results.tsv"
@@ -96,6 +98,9 @@ def main() -> None:
         if row["final_status"] != "PASS":
             raise ValueError(f"Non-PASS provenance row: {row['case_name']}")
         text = config.read_text(encoding="utf-8")
+        parsed = yaml.safe_load(text)
+        if not isinstance(parsed, dict):
+            raise ValueError(f"YAML root is not a mapping: {config}")
         if int(extract(text, "ef_search")) != int(row["ef_search"]):
             raise ValueError(f"ef_search mismatch: {config}")
         if int(extract(text, "dualQueueLowerBoundQueueSize")) != int(

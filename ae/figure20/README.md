@@ -22,3 +22,7 @@ ae/figure20/output/figure20.png
 ae/figure20/output/figure20_normalized.csv
 ae/figure20/output/figure20_summary.tsv
 ```
+
+The figure is derived from
+`ae/figure20/data/figure20_area_power_breakdown.tsv`; it has no simulator YAML
+or runtime hardware dependency.

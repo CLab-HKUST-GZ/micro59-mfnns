@@ -262,7 +262,11 @@ def plot(rows: list[dict[str, str]], output_dir: Path) -> None:
 
     output_dir.mkdir(parents=True, exist_ok=True)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
-    fig.savefig(output_dir / "figure15.pdf", bbox_inches="tight")
+    fig.savefig(
+        output_dir / "figure15.pdf",
+        bbox_inches="tight",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     fig.savefig(output_dir / "figure15.png", bbox_inches="tight")
     plt.close(fig)
 

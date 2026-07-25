@@ -13,6 +13,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 import matplotlib
+import yaml
 
 matplotlib.use("Agg")
 import matplotlib.font_manager as font_manager  # noqa: E402
@@ -181,6 +182,9 @@ def validate_config(row: dict[str, str]) -> None:
     if sha256(path) != row["portable_config_sha256"]:
         raise ValueError(f"Portable config SHA mismatch: {path}")
     text = path.read_text(encoding="utf-8")
+    parsed = yaml.safe_load(text)
+    if not isinstance(parsed, dict):
+        raise ValueError(f"YAML root is not a mapping: {path}")
     expected_k = 10 if row["recall_tag"] == "r10" else 100
     if parse_yaml_int(text, "k_neighbors") != expected_k:
         raise ValueError(f"k_neighbors mismatch: {row['point_id']}")

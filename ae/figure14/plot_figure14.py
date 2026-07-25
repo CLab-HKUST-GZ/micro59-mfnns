@@ -433,7 +433,17 @@ def plot(
 
     for suffix in ("pdf", "png"):
         output = Path(f"{output_prefix}.{suffix}")
-        fig.savefig(output, bbox_inches="tight", pad_inches=0.02)
+        metadata = (
+            {"CreationDate": None, "ModDate": None}
+            if suffix == "pdf"
+            else None
+        )
+        fig.savefig(
+            output,
+            bbox_inches="tight",
+            pad_inches=0.02,
+            metadata=metadata,
+        )
         print(f"Saved: {output}")
     plt.close(fig)
 

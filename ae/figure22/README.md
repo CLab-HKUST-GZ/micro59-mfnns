@@ -21,3 +21,9 @@ ae/figure22/output/figure22.pdf
 ae/figure22/output/figure22.png
 ae/figure22/output/figure22_summary.tsv
 ```
+
+The 14-row CSV freezes seven datasets times ANSMET/MFNNS and records the
+source stats/YAML identifiers and digests used for the final Recall@10
+operating points. The large raw experiment directories are not duplicated;
+the reproduction command recomputes the latency decomposition from the
+archived counters.

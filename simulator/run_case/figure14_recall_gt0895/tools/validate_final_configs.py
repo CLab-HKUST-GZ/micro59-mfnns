@@ -8,6 +8,8 @@ import math
 import re
 from pathlib import Path
 
+import yaml
+
 
 CASE_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = CASE_ROOT.parents[2]
@@ -78,6 +80,9 @@ def main() -> None:
         paths.add(path)
 
         text = path.read_text()
+        parsed = yaml.safe_load(text)
+        if not isinstance(parsed, dict):
+            raise RuntimeError(f"{relative}: YAML root is not a mapping")
         absolute_scalars = re.findall(
             r"^\s*[A-Za-z0-9_]+:\s*(/[^\s#]+)", text, re.MULTILINE
         )
@@ -230,7 +235,7 @@ def main() -> None:
             )
 
     print(
-        "PASS: 126 normalized, repository-relative Figure 14 YAMLs; "
+        "PASS: 126 parsed, normalized, repository-relative Figure 14 YAMLs; "
         "k100 status counts 33 direct + 2 manual + 7 copied"
     )
 

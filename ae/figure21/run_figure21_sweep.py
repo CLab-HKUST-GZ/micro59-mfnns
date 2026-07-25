@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import re
 import shlex
 import subprocess
@@ -109,7 +110,11 @@ def replace_path(text: str, key: str, value: Path | str) -> str:
         rf"^(\s{{2}}{re.escape(key)}:)\s*.*$",
         flags=re.MULTILINE,
     )
-    updated, count = pattern.subn(rf"\1 {value}", text, count=1)
+    updated, count = pattern.subn(
+        lambda match: f"{match.group(1)} {json.dumps(str(value))}",
+        text,
+        count=1,
+    )
     if count != 1:
         raise ValueError(f"Expected one top-level key {key}")
     return updated

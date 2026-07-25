@@ -17,4 +17,7 @@ simulator/run_case/figure14_recall_gt0895/scripts/run_final_case.sh \
 
 ## Expected output
 
-The pass criterion is `PASS: 126 normalized, repository-relative Figure 14 YAMLs ...`. In the synchronized baseline, validation currently stops at `(5, 'wiki1m', 'mfnns'): ef_search mismatch`: the manifest records `ef=18, queue=50`, while that YAML records `ef=17, queue=30`. The executed example case writes its configured stats file below `simulator/run_case/figure14_recall_gt0895/results/k100/glove2m/`.
+The pass criterion is
+`PASS: 126 parsed, normalized, repository-relative Figure 14 YAMLs ...`.
+The executed example case writes its configured stats file below
+`simulator/run_case/figure14_recall_gt0895/results/k100/glove2m/`.

@@ -11,6 +11,7 @@ from pathlib import Path
 
 import matplotlib
 import numpy as np
+import yaml
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -153,6 +154,9 @@ def load_provenance(path: Path) -> dict[tuple[str, str], dict[str, str]]:
         if sha256(config_path) != row["config_sha256"]:
             raise ValueError(f"Archived YAML digest mismatch for {key}")
         config_text = config_path.read_text(encoding="utf-8")
+        parsed = yaml.safe_load(config_text)
+        if not isinstance(parsed, dict):
+            raise ValueError(f"YAML root is not a mapping for {key}")
         if f"impl: {row['row_policy']}" not in config_text:
             raise ValueError(f"Row-policy mismatch in archived YAML for {key}")
         if int(row["n_query"]) != 1000 or int(row["gt_k"]) != 10:
@@ -389,7 +393,12 @@ def plot(rows: list[dict[str, object]], output_prefix: Path) -> tuple[Path, Path
     fig.tight_layout(rect=LAYOUT_RECT, pad=TIGHT_LAYOUT_PAD)
     pdf_path = output_prefix.with_suffix(".pdf")
     png_path = output_prefix.with_suffix(".png")
-    fig.savefig(pdf_path, bbox_inches="tight", pad_inches=SAVE_PAD_INCHES)
+    fig.savefig(
+        pdf_path,
+        bbox_inches="tight",
+        pad_inches=SAVE_PAD_INCHES,
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     fig.savefig(png_path, bbox_inches="tight", pad_inches=SAVE_PAD_INCHES)
     plt.close(fig)
     return png_path, pdf_path

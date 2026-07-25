@@ -12,38 +12,31 @@ FORCE="${CPU_INDEX_FORCE:-0}"
 INDEX_ROOT="${PROJECT_ROOT}/cpu_index"
 
 ALL_TARGETS=(
-  deep10m/raw
-  deep10m/normalized
-  gist1m/raw
-  gist1m/normalized
-  glove2m/raw
-  glove2m/normalized
-  pubmed/raw
-  sift1m/raw
-  sift1m/normalized
-  t2i1m/raw
-  t2i1m/normalized
-  w2v1m/raw
-  w2v1m/normalized
-  wiki1m/raw
-  wiki1m/normalized
-  deep1b/normalized
-  t2i1b/normalized
+  deep10m
+  gist1m
+  glove2m
+  pubmed
+  sift1m
+  t2i1m
+  w2v1m
+  wiki1m
+  deep1b
+  t2i1b
 )
 
 usage() {
   cat <<'EOF'
 Usage: script/cpu_index_build.sh [--dry-run] [--list] [TARGET ...]
 
-Build one or more CPU HNSW indexes. With no TARGET argument, all 17 cache
-targets are built sequentially: 15 CPU-scale variants plus Deep1B and T2I1B.
+Build one or more normalized CPU HNSW indexes. With no TARGET argument, all
+ten datasets are built sequentially.
 
 Datasets:
   deep10m gist1m glove2m pubmed sift1m t2i1m w2v1m wiki1m deep1b t2i1b
 
-A dataset name selects all supported variants. A dataset/variant target selects
-one, for example deep10m/normalized. PubMed supports raw only; the two 1B
-datasets support normalized only.
+Each target is a dataset name. The historical raw/normalized directory layer
+has been removed; normalized is the only supported output policy. PubMed's
+source file is already L2-normalized, so it is not normalized a second time.
 
 Relative-path environment overrides:
   CPU_DATA_ROOT         Dataset root (default: ../../vectordb)
@@ -83,22 +76,10 @@ require_positive_integer() {
 
 dataset_config() {
   local target="$1"
-  DATASET="${target%%/*}"
-  VARIANT="${target#*/}"
-  [[ "${DATASET}" != "${VARIANT}" ]] ||
-    fail "target must include a variant: ${target}"
-
-  case "${VARIANT}" in
-    raw)
-      NORMALIZE=0
-      ;;
-    normalized)
-      NORMALIZE=1
-      ;;
-    *)
-      fail "unsupported variant in target: ${target}"
-      ;;
-  esac
+  [[ "${target}" != */* ]] ||
+    fail "variants are no longer accepted; use the dataset name: ${target}"
+  DATASET="${target}"
+  NORMALIZE=1
 
   M=32
   EF_CONSTRUCTION=100
@@ -118,8 +99,8 @@ dataset_config() {
     pubmed)
       SOURCE_REL="pubmed/doc_vectors_norm.bin"
       FORMAT="fbin"
-      [[ "${VARIANT}" == raw ]] ||
-        fail "unsupported target: ${target} (PubMed supports raw only)"
+      # The published PubMed source is already L2-normalized.
+      NORMALIZE=0
       ;;
     sift1m)
       SOURCE_REL="sift/1M/sift/sift_base.fvecs"
@@ -142,37 +123,15 @@ dataset_config() {
       FORMAT="fbin"
       M=16
       EF_CONSTRUCTION=500
-      [[ "${VARIANT}" == normalized ]] ||
-        fail "unsupported target: ${target} (Deep1B supports normalized only)"
       ;;
     t2i1b)
       SOURCE_REL="t2i/1B/base.1B.fbin"
       FORMAT="fbin"
       M=16
       EF_CONSTRUCTION=500
-      [[ "${VARIANT}" == normalized ]] ||
-        fail "unsupported target: ${target} (T2I1B supports normalized only)"
       ;;
     *)
       fail "unsupported dataset: ${DATASET}"
-      ;;
-  esac
-}
-
-append_dataset_targets() {
-  local dataset="$1"
-  case "${dataset}" in
-    deep10m|gist1m|glove2m|sift1m|t2i1m|w2v1m|wiki1m)
-      TARGETS+=("${dataset}/raw" "${dataset}/normalized")
-      ;;
-    pubmed)
-      TARGETS+=("pubmed/raw")
-      ;;
-    deep1b|t2i1b)
-      TARGETS+=("${dataset}/normalized")
-      ;;
-    *)
-      fail "unsupported dataset: ${dataset}"
       ;;
   esac
 }
@@ -215,12 +174,8 @@ if ((${#SELECTED[@]} == 0)); then
   TARGETS=("${ALL_TARGETS[@]}")
 else
   for selection in "${SELECTED[@]}"; do
-    if [[ "${selection}" == */* ]]; then
-      dataset_config "${selection}"
-      TARGETS+=("${selection}")
-    else
-      append_dataset_targets "${selection}"
-    fi
+    dataset_config "${selection}"
+    TARGETS+=("${selection}")
   done
 fi
 
@@ -229,11 +184,11 @@ for target in "${TARGETS[@]}"; do
 done
 
 if ((LIST_ONLY)); then
-  printf '%-20s %-5s %-9s %-3s %-15s %s\n' \
-    TARGET INPUT NORMALIZE M EF_CONSTRUCTION SOURCE
+  printf '%-12s %-5s %-9s %-3s %-15s %s\n' \
+    DATASET INPUT NORMALIZE M EF_CONSTRUCTION SOURCE
   for target in "${TARGETS[@]}"; do
     dataset_config "${target}"
-    printf '%-20s %-5s %-9s %-3s %-15s %s\n' \
+    printf '%-12s %-5s %-9s %-3s %-15s %s\n' \
       "${target}" "${FORMAT}" "${NORMALIZE}" "${M}" \
       "${EF_CONSTRUCTION}" "${SOURCE_REL}"
   done
@@ -251,7 +206,7 @@ fi
 for target in "${TARGETS[@]}"; do
   dataset_config "${target}"
   base_path="${DATA_ROOT}/${SOURCE_REL}"
-  index_path="${INDEX_ROOT}/${DATASET}/${VARIANT}/hnsw_index_M${M}_ef${EF_CONSTRUCTION}.bin"
+  index_path="${INDEX_ROOT}/${DATASET}/hnsw_index_M${M}_ef${EF_CONSTRUCTION}.bin"
 
   command=(
     "${TOOL}" build
