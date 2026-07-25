@@ -17,3 +17,9 @@ Simulator configurations and their execution evidence remain under
 Figures 16 and 17 share `ae/energy_model.py` and default to the fixed trace
 summary under
 `simulator/run_case/figure14_recall_gt0895/results/paper_energy/k10/`.
+
+Validate both energy figures without rewriting their data or plots:
+
+```bash
+bash ae/validate_energy_figures.sh
+```
