@@ -6,7 +6,7 @@ geomean_norm_to_cpu:ANSMET	3.005100703899473
 geomean_norm_to_cpu:NMP-Base	2.296554952296728
 geomean_norm_to_cpu:NMP-FPMA	2.486509260928407
 geomean_norm_to_cpu:NMP-FPSA	2.512968437084503
-geomean_norm_to_cpu:NMP-Base-ET	3.733915618420788
+geomean_norm_to_cpu:NMP-Base-ET	4.082216280056246
 geomean_norm_to_cpu:NMP-FPSA-ET	4.684013510360752
 geomean_norm_to_cpu:MFNNS	5.229406395438637
 geomean_mfnns_over:CPU	5.229406395438637
@@ -30,9 +30,9 @@ max_mfnns_over:NMP-FPMA	2.872553267798696
 geomean_mfnns_over:NMP-FPSA	2.080967798189178
 min_mfnns_over:NMP-FPSA	1.457638706856141
 max_mfnns_over:NMP-FPSA	2.841885976576622
-geomean_mfnns_over:NMP-Base-ET	1.400515418623827
-min_mfnns_over:NMP-Base-ET	1.288209167510995
-max_mfnns_over:NMP-Base-ET	1.519433674796464
+geomean_mfnns_over:NMP-Base-ET	1.281021395408914
+min_mfnns_over:NMP-Base-ET	1.210200368178648
+max_mfnns_over:NMP-Base-ET	1.374262317835668
 geomean_mfnns_over:NMP-FPSA-ET	1.116437086244843
 min_mfnns_over:NMP-FPSA-ET	1.027588512446107
 max_mfnns_over:NMP-FPSA-ET	1.319542838959627

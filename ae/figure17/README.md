@@ -32,8 +32,9 @@ final YAMLs:
 
 The common `ae/energy_model.py` validates all 42 physical traces and final
 YAMLs before deriving the seven plotted logical methods. In particular,
-`NMP-Base-ET` and `NMP-FPSA-ET` both use the `ndp_et` trace; their memory
-energy is identical and only their compute-energy formulas differ.
+`NMP-Base-ET` reuses the `mfnns` trace; its memory energy, elapsed cycles,
+phase counters, and QPS match MFNNS, while its compute-energy model remains
+the Base-FP model.
 
 ## Outputs
 

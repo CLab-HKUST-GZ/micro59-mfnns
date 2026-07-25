@@ -47,8 +47,9 @@ BANG measured power values are archived in `data/external_power.csv`.
 - CPU retains the historical estimate: old nq1000 compute counters plus the
   nq32 DRAM-energy result scaled by `x30`.
 - All non-CPU memory energy is taken directly from 1000-query, 32-bank traces.
-- `NMP-Base-ET` and `NMP-FPSA-ET` share the same `ndp_et` trace, memory
-  energy, elapsed cycles, and QPS. Only their compute-energy formulas differ.
+- `NMP-Base-ET` reuses the `mfnns` trace, memory energy, elapsed cycles,
+  phase counters, and QPS. It differs from MFNNS only in the compute-energy
+  formula.
 - `NMP-FPMA` and `NMP-FPSA` share the selected `ndp_fpma` trace and differ
   only in modeled compute energy.
 
@@ -61,5 +62,5 @@ output/figure16.pdf
 output/figure16.png
 ```
 
-The builder fails if the ET pair does not share the same memory trace or if
-Base-ET does not have higher total energy and lower QPS/W than FPSA-ET.
+The builder fails if Base-ET and MFNNS do not share the same memory trace, or
+if Base-ET does not have higher total energy and lower QPS/W than MFNNS.

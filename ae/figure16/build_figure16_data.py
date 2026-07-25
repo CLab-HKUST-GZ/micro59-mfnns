@@ -156,13 +156,15 @@ def build_rows(
     }
     for dataset_key, _, _ in DATASET_ORDER:
         base = by_key[(dataset_key, "NMP-Base-ET")]
-        fpsa = by_key[(dataset_key, "NMP-FPSA-ET")]
-        if base["qps"] != fpsa["qps"]:
-            raise ValueError(f"{dataset_key}: ET pair QPS mismatch")
+        mfnns = by_key[(dataset_key, "MFNNS")]
+        if base["qps"] != mfnns["qps"]:
+            raise ValueError(f"{dataset_key}: Base-ET/MFNNS QPS mismatch")
         if float(base["energy_efficiency_qps_per_w"]) >= float(
-            fpsa["energy_efficiency_qps_per_w"]
+            mfnns["energy_efficiency_qps_per_w"]
         ):
-            raise ValueError(f"{dataset_key}: Base-ET must have lower QPS/W")
+            raise ValueError(
+                f"{dataset_key}: Base-ET must have lower QPS/W than MFNNS"
+            )
     return rows
 
 

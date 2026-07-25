@@ -33,7 +33,7 @@ METHOD_SPECS = [
     ("NMP-Base", "ndp_base", "ndp_base", "std_fp"),
     ("NMP-FPMA", "ndp_fpma", "ndp_fpma", "fpma"),
     ("NMP-FPSA", "ndp_fpma", "ndp_fpma", "fpsa"),
-    ("NMP-Base-ET", "ndp_et", "ndp_et", "base_et"),
+    ("NMP-Base-ET", "mfnns", "mfnns", "base_et"),
     ("NMP-FPSA-ET", "ndp_et", "ndp_et", "fpsa_et"),
     ("MFNNS", "mfnns", "mfnns", "fpsa_et"),
 ]
@@ -279,17 +279,19 @@ def build_energy_rows(
                     "energy_efficiency_qps_per_w": 1e12 / total,
                 }
             )
-    validate_et_pair(rows)
+    validate_base_et_mfnns_pair(rows)
     return rows
 
 
-def validate_et_pair(rows: list[dict[str, object]]) -> None:
+def validate_base_et_mfnns_pair(rows: list[dict[str, object]]) -> None:
+    """Base-ET reuses the MFNNS trace and changes only compute energy."""
+
     by_key = {
         (str(row["dataset_key"]), str(row["method"])): row for row in rows
     }
     for dataset_key, _, _ in DATASET_ORDER:
         base = by_key[(dataset_key, "NMP-Base-ET")]
-        fpsa = by_key[(dataset_key, "NMP-FPSA-ET")]
+        mfnns = by_key[(dataset_key, "MFNNS")]
         shared_fields = (
             "trace_design",
             "trace_source_design",
@@ -302,20 +304,24 @@ def validate_et_pair(rows: list[dict[str, object]]) -> None:
             "memory_energy_nj",
         )
         for field in shared_fields:
-            if base[field] != fpsa[field]:
+            if base[field] != mfnns[field]:
                 raise ValueError(
-                    f"{dataset_key}: Base-ET/FPSA-ET mismatch in {field}"
+                    f"{dataset_key}: Base-ET/MFNNS mismatch in {field}"
                 )
-        if float(base["compute_energy_nj"]) <= float(fpsa["compute_energy_nj"]):
-            raise ValueError(f"{dataset_key}: Base-ET compute energy is not higher")
-        if float(base["total_energy_nj"]) <= float(fpsa["total_energy_nj"]):
-            raise ValueError(f"{dataset_key}: Base-ET total energy is not higher")
+        if float(base["compute_energy_nj"]) <= float(mfnns["compute_energy_nj"]):
+            raise ValueError(
+                f"{dataset_key}: Base-ET compute energy must exceed MFNNS"
+            )
+        if float(base["total_energy_nj"]) <= float(mfnns["total_energy_nj"]):
+            raise ValueError(
+                f"{dataset_key}: Base-ET total energy must exceed MFNNS"
+            )
 
 
 def write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows({field: row[field] for field in fields} for row in rows)
 

@@ -12,6 +12,6 @@ normalized memory  = method memory energy  / NMP-Base total energy
 normalized total   = normalized compute + normalized memory
 ```
 
-`NMP-Base-ET` and `NMP-FPSA-ET` intentionally have identical memory
-components because both are derived from the same `ndp_et` execution trace.
-Their total-energy difference is entirely compute energy.
+`NMP-Base-ET` and MFNNS intentionally have identical memory components
+because Base-ET is derived from the `mfnns` execution trace. Their
+total-energy difference is entirely compute energy.
