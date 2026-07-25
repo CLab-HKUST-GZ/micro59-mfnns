@@ -94,7 +94,12 @@ def plot(
         text.set_fontweight("bold")
     fig.tight_layout(pad=0.3)
     output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(
+        output.with_suffix(".pdf"),
+        bbox_inches="tight",
+        pad_inches=0.02,
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     fig.savefig(output.with_suffix(".png"), bbox_inches="tight", pad_inches=0.02,
                 dpi=300)
     plt.close(fig)

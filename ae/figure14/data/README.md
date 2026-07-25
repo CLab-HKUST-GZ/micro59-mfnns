@@ -61,3 +61,7 @@ Figure 14 plots CPU-normalized QPS. Every row now uses the CPU QPS selected for
 the same Figure 14 `(k, dataset)`. BANG's measured QPS is retained, but its
 previous source-specific CPU denominator is not used in this combined figure.
 Consequently, ratios between plotted bars are also direct ratios of their QPS.
+
+The paper-selected PubMed BANG QPS is explicitly fixed to `17857` for
+Recall@5 and `19607` for Recall@10. These two values are marked
+`BANG:user_override_20260725` in the canonical CSV.

@@ -1,6 +1,6 @@
 23d368cb6c6701f143f6145317bdc714c1d80cf171313d07b48ce8484e67b47b  external_power.csv
 dd50d69efde5fb52f5a4d2aa0056c293c1e0f51b0dcf184a92654108ba2c6e54  figure16_energy_efficiency.csv
 8f064a4c48a82f152b08e9c4f44214dab3d671f9331a9fe838ceb5f3f6925783  ../output/figure16_summary.tsv
-ee052a7e3dd010910ad01df9b579c197f3133019170137c6a7144d777bf33301  ../output/figure16.pdf
+437d59b920c73352b4c5fe2046bfbe29dcfa6995cba610945db111d33506f4a3  ../output/figure16.pdf
 ec1d1cf3eb06e2b1f1ac268b2ddb389c69237dc1a68e1afb420a986d47a967d2  ../output/figure16.png
 7add71ef77924c853603a34ebac452cf6964f278634c2c2573df74931090341d  ../../../simulator/run_case/figure14_recall_gt0895/results/paper_energy/k10/execution_traces.csv

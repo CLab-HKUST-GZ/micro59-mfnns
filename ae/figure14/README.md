@@ -52,6 +52,10 @@ against one Figure 14 CPU QPS per `(k, dataset)`, including BANG; this removes
 the previous mixed-CPU-normalizer ambiguity. The previously added measured
 GloVe2M k=100 NMP-Base result remains in use.
 
+The selected PubMed BANG QPS values are `17857` for Recall@5 and `19607` for
+Recall@10, as recorded by the explicit `BANG:user_override_20260725` source
+labels in the canonical CSV.
+
 The canonical data and source inventory are documented in
 [`data/README.md`](data/README.md). Internal paper-edit notes are intentionally
 not included in the remote package.
