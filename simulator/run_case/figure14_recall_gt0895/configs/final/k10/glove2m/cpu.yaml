@@ -54,6 +54,11 @@ MemorySystem:
       rank: 2
     timing:
       preset: DDR4_3200W
+    drampower_enable: true
+    voltage:
+      preset: Default
+    current:
+      preset: Default
   Controller:
     impl: Generic
     Scheduler:
