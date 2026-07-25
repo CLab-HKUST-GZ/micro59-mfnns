@@ -1,0 +1,4 @@
+artifact	included	size_bytes	sha256	source_ref	purpose
+hnsw_index_M32_ef100.bin	no	1076324284	fafbcf6f8b7c78766176b583f0a1eee090c724f367f48d55476d02f47727c051	MFANNS/recall_analysis/memory/vectordb_recall_20260306/cache/t2i1m/normalized/hnsw_index_M32_ef100.bin	T2I1M normalized HNSW M32 efConstruction100 index
+query_vectors_n100_seed42.bin	yes	80008	c898bfbdeefcd2eb8d3214f54d0642fb6b69951e4da5e8cb3105cbcec7cb2a5b	MFANNS/recall_analysis/memory/vectordb_recall_20260306/cache/t2i1m/normalized/query_vectors_n100_seed42.bin	Exact 100 normalized query vectors used by Figure 21
+gt_labels_topk32_n100_seed42.bin	yes	12808	067586eb223a1649bafa4bd874fba3d117bd702e49abffb76be1dcd42c09ec6a	MFANNS/recall_analysis/memory/vectordb_recall_20260306/cache/t2i1m/normalized/gt_labels_topk32_n100_seed42.bin	Exact top-32 ground truth used by Figure 21

@@ -1,0 +1,149 @@
+# Figure 21 AE simulator configuration
+# source_yaml: MFANNS/simulator/memory/20260329/mfnns_t2i_k10_ef20_30_40_dualq_q20_100/yamls/t2i1m_normalized_k10_ef40_q99.yaml
+# source_yaml_sha256: cf536f1571af705b5ba1ca04f3ee5b6338e69fa0059f8cd3f0dfbe28d3fbc169
+# Input paths are repository-relative. The Figure 21 runner resolves
+# them to absolute paths in a task-specific runtime copy.
+Frontend:
+  impl: HNSWTraversalUnit
+  model_path: mfnns_hnswlib/cpu_index/t2i1m/hnsw_index_M32_ef100.bin
+  query_path: ae/figure21/inputs/query_vectors_n100_seed42.bin
+  gt_path: ae/figure21/inputs/gt_labels_topk32_n100_seed42.bin
+  gt_k: 32
+  stat_path: stats/mfnns/t2i1m_normalized_k10_ef40_q99_stats.yml
+  nDim: 200
+  vDimSize: 200
+  ef_search: 40
+  traversalMemAcc: true
+  nQueryLimit: 100
+  nParallelQuery: 100
+  nEmbUnit: 32
+  enableLogging: false
+  loadModel: true
+  earlyExitEnable: false
+  dualQueueLowerBoundETEnable: true
+  topkThresholdETEnable: false
+  allowSample: false
+  allowoutlier: false
+  outlier_burden: false
+  dimbitMode: dimFirst
+  datatype: isFloat
+  dataunsigned: false
+  spacetype: L2
+  limit_bs_num: true
+  bs_num: 2
+  dimStep: 64
+  bitStep: 8
+  bitStep_trav1: 5
+  bitStep_trav2: 3
+  outlier_percentage: 0.002
+  arrayValues:
+  - 10
+  - 2
+  resProbeEpoch: 25
+  k_neighbors: 10
+  dualQueueLowerBoundQueueSize: 99
+  dualQueueLowerBoundWarmupSize: 98
+  mfnnsEnable: true
+  vectorLayoutMode: auto
+  vectorLogicalLayout: global_coarse_fine_split
+  preprocessVectorDataBitWidth: 16
+  vectorPhysicalPlacement: toplayer_replicated
+  vectorRankPlacement: modulo
+  vectorRankPlacementChunkSize: 54
+  vectorRankPlacementSuperChunkFactor: 1
+  vectorRankPlacementStripeGroupSize: 1
+  vectorRankPlacementStripeBlockSize: 1
+  vectorAddressMapping: naive
+  vectorAddressMappingPhase1: auto
+  vectorAddressMappingPhase2: auto
+  vectorReplicaDispatch: hot_node
+  hotNodeReplicationCount: 0
+  hotReplicaRowAwareEnable: false
+  vectorPhaseBankPartitionEnable: false
+  vectorPhase1DedicatedBGCount: 2
+  layout2GlobalCoarseThenFineEnable: false
+  dualQueueAllowLinearFullReadLayout: false
+  Frontend:
+    impl: HNSWEmbUnit
+    nParallelDisReq: 64
+    nParallelPDisReq: 1
+    nDim: 200
+    vectorDataBitWidth: 16
+    earlyExitEnable: true
+    ansmetRuntimeTrueFp16BitChopEnable: true
+    dimbitMode: dimFirst
+    enableLogging: false
+    dualQueueBGAwareScheduleEnable: false
+    dualQueueFineBankRowAwareScheduleEnable: false
+    nFMAC: 16
+    cyclesPerFMAC: 18
+    multiplierLatencyCycles: 18
+    fmacPipelined: true
+    embComputeCycleRatio: 0.2
+    dualQueueCoarseOpsPerDim: 1
+    dualQueueFineOpsPerDim: 1
+    dualQueueCoarseLanes: 16
+    dualQueueCoarseCyclesPerOp: 3
+    dualQueueCoarseLatencyCycles: 3
+    dualQueueCoarseSetupCycles: 0
+    dualQueueCoarseFinalizeCycles: 0
+    dualQueueCoarsePipelined: true
+    dualQueueFineLanes: 16
+    dualQueueFineCyclesPerOp: 13
+    dualQueueFineLatencyCycles: 13
+    dualQueueFineSetupCycles: 0
+    dualQueueFineFinalizeCycles: 0
+    dualQueueFinePipelined: true
+    stdFpLanes: 16
+    stdFpSetupCycles: 0
+    stdFpFinalizeCycles: 0
+    zeroMemFinalizeSeparatePoolEnable: true
+    zeroMemFinalizeWorkItemsPerTask: 1
+    zeroMemFinalizeModeledOpsPerTask: 1
+    zeroMemFinalizeLanes: 1
+    zeroMemFinalizeIssueInterval: 1
+    zeroMemFinalizeLatencyCycles: 1
+    zeroMemFinalizeSetupCycles: 0
+    zeroMemFinalizeFinalizeCycles: 0
+    zeroMemFinalizePipelined: true
+    vectorCacheSize: 0
+    vectorCacheMode: full_object
+    phase1SignExpCacheSize: 0
+    maxPDisReqDispatchPerCycle: 1
+    rowSweepEnable: true
+    maxRowSweepBatch: 8
+    fp16L2SquareMethod: standard
+  perQuerySummaryEnable: false
+  debugIssueTraceEnable: false
+  debugDuplicateAcceptEnable: false
+  hotNodeReplicationTopLevelCount: 3
+MemorySystem:
+  impl: MultiGenericDRAM
+  clock_ratio: 3
+  nMemory: 32
+  assignMethod: source
+  DRAM:
+    impl: DDR4
+    org:
+      preset: DDR4_8Gb_x8
+      channel: 1
+      rank: 1
+    timing:
+      preset: DDR4_3200W
+    drampower_enable: true
+    voltage:
+      preset: Default
+    current:
+      preset: Default
+  Controller:
+    impl: Generic
+    Scheduler:
+      impl: FRFCFS
+    RefreshManager:
+      impl: NoRefresh
+    RowPolicy:
+      impl: OpenRowPolicy
+      cap: 4
+    plugins: null
+  AddrMapper:
+    impl: RoBaRaCoCh
