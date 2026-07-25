@@ -11,6 +11,7 @@ Current coverage:
   Figure 14 QPS table and synthesized DPE areas.
 - `figure16/`: Recall@10 system energy-efficiency (QPS/W) comparison.
 - `figure17/`: Recall@10 normalized system-energy breakdown.
+- `figure22/`: final Recall@10 ANSMET/MFNNS normalized latency breakdown.
 
 Simulator configurations and their execution evidence remain under
 `simulator/run_case/`; the `ae/` copy is the compact plotting interface.
