@@ -1,32 +1,25 @@
-# Artifact-evaluation material
+# Artifact-evaluation tests
 
-This directory contains portable, paper-facing artifact material. Each figure
-subdirectory owns its canonical plotting data, plotting code, generated output,
-and provenance notes.
+## Environment
 
-Current coverage:
+- Linux, Bash, and Python 3.
+- Install the packages from the target figure's `requirements.txt`; Figure 14 requires NumPy and Matplotlib.
+- Run all commands from the repository root.
 
-- `figure14/`: throughput comparison for k=5, k=10, and k=100.
-- `figure15/`: Recall@10 area-efficiency comparison derived from the canonical
-  Figure 14 QPS table and synthesized DPE areas.
-- `figure16/`: Recall@10 system energy-efficiency (QPS/W) comparison.
-- `figure17/`: Recall@10 normalized system-energy breakdown.
-- `figure19/`: MFNNS versus JUNO++ recall-QPS frontiers, including the complete
-  277-row JUNO++ Fig. 8 vector extraction and point-level MFNNS provenance.
-- `figure21/`: T2I1M Recall@10 sensitivity to LBQueue size, with the complete
-  243-case MFNNS sweep and three ANSMET upper-bound configurations.
-- `figure22/`: final Recall@10 ANSMET/MFNNS normalized latency breakdown.
-- `figure23/`: historical Recall@10 DRAM row-miss comparison with the 21
-  original simulator YAMLs and frozen plotting data.
-
-Simulator configurations and their execution evidence remain under
-`simulator/run_case/`; the `ae/` copy is the compact plotting interface.
-Figures 16 and 17 share `ae/energy_model.py` and default to the fixed trace
-summary under
-`simulator/run_case/figure14_recall_gt0895/results/paper_energy/k10/`.
-
-Validate both energy figures without rewriting their data or plots:
+## Test
 
 ```bash
+python3 ae/figure14/plot_figure14.py --check-only
+bash ae/figure15/reproduce_figure15.sh
 bash ae/validate_energy_figures.sh
+bash ae/figure18/validate_figure18.sh
+bash ae/figure19/reproduce_figure19.sh
+bash ae/figure20/reproduce_figure20.sh
+bash ae/figure21/reproduce_figure21.sh
+bash ae/figure22/reproduce_figure22.sh
+bash ae/figure23/reproduce_figure23.sh
 ```
+
+## Expected output
+
+Every command exits with status 0. Generated plots and summaries are under `ae/figureNN/output/`; read-only checks print `DATA_OK`, `CHECK_OK`, or a figure-specific validation-passed message.

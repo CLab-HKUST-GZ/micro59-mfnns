@@ -1,24 +1,18 @@
-# Figure 14 simulator results
+# Figure 14 result test
 
-Portable formal YAMLs write generated stats below this directory using:
+## Environment
 
-```text
-results/k<k>/<dataset>/<design>_stats.yml
+- Python 3 with NumPy, Matplotlib, and PyYAML.
+- GNU `sha256sum`.
+- Run from the repository root.
+
+## Test
+
+```bash
+python3 simulator/run_case/figure14_recall_gt0895/tools/validate_final_configs.py
+bash ae/validate_energy_figures.sh
 ```
 
-Generated stats are ignored by Git. The historical result evidence remains
-under `provenance/` and is not overwritten by this portable run interface.
+## Expected output
 
-## Paper energy trace summary
-
-Figures 16 and 17 default to the tracked, fixed Recall@10 trace summary:
-
-```text
-results/paper_energy/k10/execution_traces.csv
-```
-
-This table contains the counters and DRAM-energy sums extracted from the
-selected executions, together with repository-relative source references and
-SHA-256 digests. The figure builders validate each row against the matching
-final YAML under `../configs/final/k10/`. Generated `*_stats.yml` files remain
-ignored and are not required to reproduce the archived paper figures.
+The configuration pass criterion is 126 valid YAMLs; the synchronized baseline currently reports the documented `k=5/wiki1m/mfnns` manifest/YAML mismatch. The independent energy check exits with status 0 and ends with `Figures 16 and 17 validation passed.` New simulator statistics are written below `simulator/run_case/figure14_recall_gt0895/results/k<k>/<dataset>/`; the tracked energy trace remains at `simulator/run_case/figure14_recall_gt0895/results/paper_energy/k10/execution_traces.csv`.

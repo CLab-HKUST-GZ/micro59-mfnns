@@ -1,17 +1,24 @@
-# CPU index cache
+# CPU index test
 
-This tracked directory is the canonical output root for
-[`../../script/cpu_index_build.sh`](../../script/cpu_index_build.sh), which is
-run from the top-level repository root. The directory layout is:
+## Environment
 
-```text
-cpu_index/<dataset>/<variant>/hnsw_index_M<M>_ef<ef_construction>.bin
+- Linux, Bash, GNU Make, and a C++17 compiler with OpenMP.
+- Real builds require the datasets selected by `CPU_DATA_ROOT`.
+- Run from the repository root.
+
+## Test
+
+```bash
+script/cpu_index_build.sh --list
+script/cpu_index_build.sh --dry-run deep10m/normalized
 ```
 
-The leaf directories are committed so the expected cache structure exists
-after cloning. Serialized indexes are deliberately ignored because the 1B
-indexes are very large and can be regenerated from the source datasets.
+To build the selected index, rerun the second command without `--dry-run`.
 
-The 15 CPU-scale raw/normalized cache variants use `M=32` and
-`ef_construction=100`. Deep1B/normalized and T2I1B/normalized use `M=16` and
-`ef_construction=500`.
+## Expected output
+
+`--list` prints the supported dataset/variant matrix. `--dry-run` prints the exact `mfnns_hnsw_tool build` command without writing files. The real build writes:
+
+```text
+mfnns_hnswlib/cpu_index/<dataset>/<variant>/hnsw_index_M<M>_ef<ef_construction>.bin
+```

@@ -1,31 +1,18 @@
-# Figure 23 data and provenance
+# Figure 23 data test
 
-## `figure23_row_miss_ratio.csv`
+## Environment
 
-This is the byte-identical 21-row author plotting table. For each dataset and
-method it stores the historical source/run/Slurm paths, 32-memory counter
-sums, and derived values.
+- Python 3 with the packages in `ae/figure23/requirements.txt`.
+- GNU `sha256sum`.
+- Run from the repository root.
 
-The portable plotter independently validates:
+## Test
 
-```text
-occurrences == 32
-service_cycles_per_read == sum_service_cycles_0 / sum_num_read_reqs_0
-row_miss_per_read == sum_row_misses_0 / sum_num_read_reqs_0
+```bash
+python3 ae/figure23/plot_figure23.py --check-only
+(cd ae/figure23/data && sha256sum -c SHA256SUMS)
 ```
 
-The absolute paths in this frozen table are historical provenance strings;
-they are not dereferenced during AE reproduction.
+## Expected output
 
-## `config_provenance.tsv`
-
-This 21-row manifest maps every plot row to:
-
-- the archived YAML and its SHA-256;
-- repository-relative historical YAML, stats, and Slurm references;
-- stats and Slurm SHA-256 values from the author workspace;
-- row policy, `ef_search`, LBQueue size, recall, query count, and `gt_k`.
-
-The archived YAMLs are verified locally during every `--check-only` or plot
-run. Historical stats and Slurm files are not duplicated in the compact
-remote bundle; the plotting table freezes their raw 32-memory sums.
+The plotter prints `CHECK_OK rows=21 yamls=21 ...`, and every checksum reports `OK`. Generated figures and the summary are under `ae/figure23/output/`.

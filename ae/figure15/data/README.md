@@ -1,34 +1,18 @@
-# Figure 15 data
+# Figure 15 data test
 
-`area_specs.csv` records the six plotted methods, the current Figure 14 design
-whose QPS is used, the synthesized DPE area, and whether the row is measured
-or derived.
+## Environment
 
-`figure15_area_efficiency.csv` is generated from:
+- Python 3 with the packages in `ae/figure15/requirements.txt`.
+- GNU `sha256sum`.
+- Run from the repository root.
 
-```text
-../../figure14/data/figure14_results.csv
-area_specs.csv
+## Test
+
+```bash
+python3 ae/figure15/build_figure15_data.py --check-only
+(cd ae/figure15/data && sha256sum -c SHA256SUMS)
 ```
 
-It contains 42 rows: one for each combination of seven datasets and six
-methods at Recall@10. Every row preserves the selected Figure 14 QPS, recall,
-measurement status, source label, stats/config reference, and source note.
+## Expected output
 
-The derived metrics are:
-
-```text
-area_efficiency_kqps_per_mm2 = (QPS / 1000) / area_mm2
-normalized_area_efficiency_vs_ansmet =
-    area_efficiency(method) / area_efficiency(ANSMET)
-```
-
-The current Figure 14 source contains five direct Recall@10 NMP-FPMA results
-and two explicit NMP-Base fallbacks for Wiki1M and PubMed. The data builder
-validates those counts and requires all referenced k=10 source rows to have
-recall above 0.895.
-
-`SHA256SUMS` covers the area specification and generated CSV. Plot-file hashes
-are not pinned because PDF metadata and font rendering can vary with
-Matplotlib and system fonts; the plotting script validates all numeric values
-before rendering.
+The builder prints `CHECK_OK rows=42 ...`; `sha256sum` reports every listed file as `OK`. The generated data file is `ae/figure15/data/figure15_area_efficiency.csv`, and the summary is `ae/figure15/output/figure15_summary.tsv`.

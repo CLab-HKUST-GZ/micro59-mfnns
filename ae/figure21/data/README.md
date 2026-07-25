@@ -1,21 +1,17 @@
-# Figure 21 data
+# Figure 21 data test
 
-- `figure21_sweep_results.tsv`: the 243 completed MFNNS sweep rows consumed by
-  the plotter.
-- `simulator_provenance.tsv`: per-case YAML/stats/job provenance and hashes for
-  243 MFNNS cases plus three ANSMET references.
-- `ansmet_stats/`: the three complete raw ANSMET stats files used for reference
-  recalls.
-- `input_manifest.tsv`: exact input sizes and hashes, including the large index
-  that is intentionally not duplicated in Git.
-- `SHA256SUMS`: deterministic data, inputs, and exported-TSV inventory. Rendered
-  PDF/PNG files are excluded because font and Matplotlib versions can change
-  their bytes without changing the plotted values.
+## Environment
 
-The plotter computes normalized throughput as:
+- Python 3, GNU `sha256sum`, and the packages in `ae/figure21/requirements.txt`.
+- Run from the repository root.
 
-```text
-global maximum s_mem_cycle / case s_mem_cycle
+## Test
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 ae/figure21/validate_figure21.py
+(cd ae/figure21/data && sha256sum -c SHA256SUMS)
 ```
 
-For this sweep, the global maximum is `618147`.
+## Expected output
+
+The validator prints `CHECK_OK sweep=243 ansmet=3 configs=246 global_max_cycle=618147`; every checksum reports `OK`. The generated plot data is `ae/figure21/output/figure21_plot_data.tsv`.

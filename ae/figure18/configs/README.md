@@ -1,19 +1,18 @@
-# Figure 18 simulator YAMLs
+# Figure 18 configuration test
 
-Layout:
+## Environment
 
-```text
-configs/<dataset>/<r10|r100>/<ansmet|mfnns>/*.yaml
+- Linux, Bash, Python 3, and the packages in `ae/figure18/requirements.txt`.
+- Run from the repository root.
+
+## Test
+
+```bash
+bash ae/figure18/validate_figure18.sh
+python3 ae/figure18/run_simulator_configs.py \
+  --dataset deep1b --recall-tag r10 --method mfnns
 ```
 
-There are 108 configurations, one per plotted ANSMET/MFNNS point.  Every file
-starts with a `provenance_status` comment and its source-YAML reference.
+## Expected output
 
-`verified_original_yaml_stats` files preserve the original configuration
-semantics; only `stat_path` is made runtime-relative.  Files marked
-`original_yaml_cycle_mismatch` or
-`reconstructed_from_same_panel_template` are rerun recipes and must not be
-presented as historical evidence until a new stats file is produced.
-
-The index, query, and ground-truth paths point to the prepared author-workspace
-billion-scale data.  Large inputs are intentionally not duplicated in `ae/`.
+Validation reports 108 valid simulator configurations and exits with status 0. The selector prints runnable commands without submitting jobs. With `--submit --result-root memory/YYYYMMDD/NNN_name`, run records and statistics are written below that explicit result directory.

@@ -1,62 +1,20 @@
-# Figure 14 portable run cases
+# Figure 14 simulator test
 
-This directory contains only the final runnable Figure 14 simulator
-configurations and their compact manifests. Search-stage YAMLs and historical
-scheduler snapshots are intentionally excluded.
+## Environment
 
-## Configuration matrix
+- Python 3 with `simulator/run_case/figure14_recall_gt0895/requirements.txt`.
+- A built `simulator/build/ramulator2` is required only to execute a case.
+- The selected YAML's HNSW index, query, and ground-truth files must exist.
+- Run from the repository root.
 
-```text
-configs/final/k<5|10|100>/<dataset>/<design>.yaml
-```
-
-The matrix contains:
-
-- 3 result counts: k=5, k=10, and k=100;
-- 7 datasets: Deep10M, GloVe2M, SIFT1M, T2I1M, W2V1M, Wiki1M, PubMed;
-- 6 simulator designs: CPU, ANSMET, NMP-Base, NMP-FPMA, NMP-FPSA-ET,
-  and MFNNS.
-
-There are 126 YAMLs in total. Every runnable input/output path is repository
-relative and uses the normalized, variant-free CPU-index layout.
-
-## Validate
-
-From the repository root:
+## Test
 
 ```bash
 python3 simulator/run_case/figure14_recall_gt0895/tools/validate_final_configs.py
-```
-
-## Run one case
-
-Build the simulator first, then run:
-
-```bash
 simulator/run_case/figure14_recall_gt0895/scripts/run_final_case.sh \
   simulator/run_case/figure14_recall_gt0895/configs/final/k100/glove2m/ndp_base.yaml
 ```
 
-Generated stats are written below `results/` according to each YAML's
-repository-relative `stat_path`.
+## Expected output
 
-`manifests/final_cases.tsv` records the full runnable matrix.
-`manifests/k100_sources.tsv` records the k=100 Figure/source mapping. The seven
-NMP-FPMA k=100 rows are derived from the documented NMP-Base timing model and
-must not be interpreted as direct NMP-FPMA measurements.
-
-## Figure 14 k=5/10 result policy
-
-The portable Figure 14 data uses 81 completed k=5/10 simulator measurements,
-all with strict `recall > 0.895`. Eleven NMP-FPMA points use direct test
-results. The following three direct jobs were cancelled:
-
-- k=5 / PubMed / NMP-FPMA;
-- k=10 / Wiki1M / NMP-FPMA;
-- k=10 / PubMed / NMP-FPMA.
-
-Their YAMLs remain in the runnable 126-case matrix. Until those three YAMLs
-produce direct stats, the plot explicitly copies the latest NMP-Base metrics
-for the same `(k, dataset)` and marks them as derived. The selected values,
-stats hashes, and final-YAML references are recorded in
-`ae/figure14/data/k5_k10_latest_metrics.csv`.
+The pass criterion is `PASS: 126 normalized, repository-relative Figure 14 YAMLs ...`. In the synchronized baseline, validation currently stops at `(5, 'wiki1m', 'mfnns'): ef_search mismatch`: the manifest records `ef=18, queue=50`, while that YAML records `ef=17, queue=30`. The executed example case writes its configured stats file below `simulator/run_case/figure14_recall_gt0895/results/k100/glove2m/`.

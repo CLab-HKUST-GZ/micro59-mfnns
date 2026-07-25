@@ -1,22 +1,18 @@
-# Figure 16 data
+# Figure 16 data test
 
-`figure16_energy_efficiency.csv` is generated from three repository inputs:
+## Environment
 
-1. Recall@10 QPS/recall in `../../figure14/data/figure14_results.csv`;
-2. the fixed simulator execution summary in
-   `../../../simulator/run_case/figure14_recall_gt0895/results/paper_energy/k10/execution_traces.csv`;
-3. CAGRA/BANG measured power archived in `external_power.csv`.
+- Python 3 with the packages in `ae/figure16/requirements.txt`.
+- GNU `sha256sum`.
+- Run from the repository root.
 
-For simulator methods, power is recomputed from the selected Figure 14 QPS
-and energy per 1000-query batch. Consequently:
+## Test
 
-```text
-power_W = total_energy_nJ * QPS / 1e12
-QPS/W   = 1e12 / total_energy_nJ
+```bash
+python3 ae/figure16/build_figure16_data.py --check-only
+(cd ae/figure16/data && sha256sum -c SHA256SUMS)
 ```
 
-CPU retains the documented historical `x30` DRAM-energy estimate. Non-CPU
-methods use direct 1000-query DRAM energy.
+## Expected output
 
-The source strings in `external_power.csv` are repository-independent
-provenance identifiers, not filesystem paths.
+Both commands exit with status 0, and `sha256sum` reports every listed file as `OK`. The generated table is `ae/figure16/data/figure16_energy_efficiency.csv`; figure files and the summary are under `ae/figure16/output/`.

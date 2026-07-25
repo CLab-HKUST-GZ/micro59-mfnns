@@ -1,15 +1,18 @@
-# Figure 22 data
+# Figure 22 data test
 
-`figure22_latency_breakdown.csv` contains one row per final Recall@10
-ANSMET/MFNNS operating point. The selected configurations come from
-`ae/figure14/data/k5_k10_latest_metrics.csv`; the latency counters were
-extracted from the matching formal Slurm outputs after requiring:
+## Environment
 
-```text
-Slurm Total Memory cycle == selected Figure 14 s_mem_cycle
+- Python 3 with the packages in `ae/figure22/requirements.txt`.
+- GNU `sha256sum`.
+- Run from the repository root.
+
+## Test
+
+```bash
+python3 ae/figure22/plot_figure22.py --check-only
+(cd ae/figure22/data && sha256sum -c SHA256SUMS)
 ```
 
-All 14 rows passed that identity check. The source audit and old/new
-comparison are recorded in
-`memory/20260725/019_latency_breakdown_topk10_latest_data_audit/` in the
-author workspace.
+## Expected output
+
+The plotter prints `CHECK_OK rows=14 ...`, and every checksum reports `OK`. Generated figures and the numeric summary are under `ae/figure22/output/`.
