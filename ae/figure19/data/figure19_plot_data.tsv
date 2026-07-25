@@ -1,0 +1,354 @@
+source	dataset	paper_dataset	recall_tag	paper_metric	series	recall	qps	source_detail
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.4169030099886172	1315061.233234503	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.5538014589222631	1149537.8888439718	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.6871001487640175	975366.9661921008	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.8066988663296525	953766.9978914539	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.8952978802511575	759831.4737565177	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.9542972892517023	415523.60792290943	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.9816968755238906	257962.32098690158	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.9940967092108695	146609.266163891	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.9978968662775534	75944.46714079296	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	+HNSW	0.9982968262403542	39115.475831002484	pdf_page=17,drawing=350
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.44000275795065813	15216638.780176003	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.6100009690431765	9342459.458032459	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.769999225652205	5565472.302227998	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.8699981733536865	3054555.496968778	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9199977069177689	1818449.5993647277	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9299975419745754	1319724.8410189745	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9399973770313819	982985.3308016155	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9499973315148715	844108.7011326356	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9599972859983614	733239.1815066105	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9699971210551679	569512.8440644131	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9799969561119743	446052.9492624262	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9899969105954642	241364.59653649468	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9959967877442113	151657.80427365267	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO++ frontier	0.9979967069848992	125163.86099121979	pdf_page=17,drawing=404
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.6000010742730284	3596671.5314314472	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.7199998115148061	2397133.754318016	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.829998594273094	1172767.7296922202	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.8499983838133902	1068518.565012564	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.909997752434279	775682.3990987783	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9199977069177689	678155.7151441802	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9349975789296621	632536.2490833366	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9499973315148715	568716.8205314047	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9599972859983614	535263.6036010162	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9699971210551679	368607.2850559067	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9799969561119743	313774.15139623097	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9899969105954642	241364.59653649468	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9959967877442113	151657.80427365267	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-H	0.9979967069848992	125163.86099121979	pdf_page=17,drawing=361
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.44000275795065813	15216638.780176003	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.6100009690431765	9342459.458032459	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.769999225652205	5565472.302227998	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.8699981733536865	3054555.496968778	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.9199977069177689	1818449.5993647277	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.9299975419745754	1319724.8410189745	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-L	0.9399973770313819	982985.3308016155	pdf_page=17,drawing=396
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-M	0.9299975419745754	1115134.3873633982	pdf_page=17,drawing=385
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-M	0.9499973315148715	844108.7011326356	pdf_page=17,drawing=385
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-M	0.9599972859983614	733239.1815066105	pdf_page=17,drawing=385
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-M	0.9699971210551679	569512.8440644131	pdf_page=17,drawing=385
+juno++_fig8_vector	sift1m	SIFT1M	r1	R1@100	JUNO-M	0.9799969561119743	446052.9492624262	pdf_page=17,drawing=385
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.381	9098767.117	sift1m_r1_mfnns_lbqfill_ef001_q032
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.637	6496195.665	sift1m_r1_mfnns_lbqfill_ef002_q016
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.747	5278820.711	sift1m_r1_mfnns_lowef_ef003_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.748	5143073.887	sift1m_r1_mfnns_lbqfill_ef003_q024
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.795	4497565.693	sift1m_r1_mfnns_lowef_ef004_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.805	4419303.518	sift1m_r1_mfnns_lbqfill_ef004_q008
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.806	4230588.21	sift1m_r1_mfnns_lbqfill_ef004_q032
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.844	3998020.98	sift1m_r1_mfnns_lowef_ef005_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.851	3846172.337	sift1m_r1_mfnns_lbqfill_ef005_q010
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.852	3686228.251	sift1m_r1_mfnns_lbqfill_ef005_q040
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.874	3585450.243	sift1m_r1_mfnns_lowef_ef006_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.882	3514953.932	sift1m_r1_mfnns_lowef_ef006_q003
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.886	3261658.39	sift1m_r1_mfnns_lbqfill_ef006_q048
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.899	3048211.272	sift1m_r1_mfnns_lowef_ef008_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.906	2976201.548	sift1m_r1_mfnns_lbqfill_ef008_q016
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.907	2699975.363	sift1m_r1_mfnns_lbqfill_ef008_q064
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.924	2574632.149	sift1m_r1_mfnns_ef010_q010
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.926	2543930.5	sift1m_r1_mfnns_ef010_q020
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.927	2303822.329	sift1m_r1_mfnns_lbqfill_ef010_q080
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.942	2288008.832	sift1m_r1_mfnns_lbqfill_ef012_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.943	2163044.918	sift1m_r1_mfnns_lbqfill_ef012_q048
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.945	2031235.321	sift1m_r1_mfnns_lbqfill_ef012_q096
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.962	1972026.8	sift1m_r1_mfnns_lbqfill_ef015_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.963	1851641.828	sift1m_r1_mfnns_lbqfill_ef015_q060
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.965	1730388.213	sift1m_r1_mfnns_lbqfill_ef015_q120
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.97	1594105.0	sift1m_r1_mfnns_subef_ef020_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.972	1579859.945	sift1m_r1_mfnns_ef020_q020
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.975	1566940.685	sift1m_r1_mfnns_subef_ef020_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.98	1122847.992	sift1m_r1_mfnns_subef_ef030_q007
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.981	1083205.041	sift1m_r1_mfnns_subef_ef030_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.982	848312.2298	sift1m_r1_mfnns_subef_ef040_q030
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.983	843371.2077	sift1m_r1_mfnns_subef_ef040_q010
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.984	838443.4716	sift1m_r1_mfnns_ef040_q040
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.987	659400.0778	sift1m_r1_mfnns_subef_ef050_q012
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.988	542833.2776	sift1m_r1_mfnns_subef_ef060_q045
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.99	536958.1589	sift1m_r1_mfnns_subef_ef060_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r1	R1@100	MFNNS frontier	0.992	380097.3429	sift1m_r1_mfnns_ef080_q080
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.38000344378833695	1073564.2742480782	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.4566025892404382	975366.0946425438	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.5996011143102274	953767.1053823356	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.7372995428828168	759831.5593905917	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.8537984214533907	415523.23662735545	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.9336973806271796	257962.35005961524	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.9770970373849719	146609.28268695995	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.9925969489203785	75944.3992798033	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	+HNSW	0.9957968674761526	39115.55896032932	pdf_page=17,drawing=257
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.38000344378833695	11923110.144012323	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.46000254749095437	9342460.510940854	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.6200008638133246	5565472.929464587	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.7499994361119088	3054555.84122149	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.839998489043242	1818446.144634672	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.8699981733536865	1319724.9897538198	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.8799981278371762	982986.4307272927	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.8899979628939827	844108.7962648731	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.8999977979507892	733238.5263129169	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.9239975453991447	569512.335170134	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.9299975419745754	446052.999533218	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.9649969646733978	241364.86661490533	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.9799969561119743	151657.6687582027	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO++ frontier	0.9899969105954642	125163.74914971564	pdf_page=17,drawing=305
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.5400017056521396	3596671.9367813934	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.6300007585834728	2397134.024478366	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.7099998570313162	1172765.5016426058	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.7499994361119088	1068518.6854361065	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.8099988047327976	775682.4865192722	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.829998594273094	678155.7915732801	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.8599982785835384	632536.3203710587	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.8899979628939827	568717.4569053294	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.909997752434279	535263.1253105125	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.9199977069177689	368607.69751436706	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.9399973770313819	313773.871019989	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.9649969646733978	241364.86661490533	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.9799969561119743	151657.6687582027	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-H	0.9899969105954642	125163.74914971564	pdf_page=17,drawing=266
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.38000344378833695	11923110.144012323	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.46000254749095437	9342460.510940854	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.6200008638133246	5565472.929464587	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.7499994361119088	3054555.84122149	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.839998489043242	1818446.144634672	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.8699981733536865	1319724.9897538198	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-L	0.8799981278371762	982986.4307272927	pdf_page=17,drawing=298
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-M	0.829998594273094	1115134.5130406094	pdf_page=17,drawing=287
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-M	0.8899979628939827	844108.7962648731	pdf_page=17,drawing=287
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-M	0.8999977979507892	733238.5263129169	pdf_page=17,drawing=287
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-M	0.9239975453991447	569512.335170134	pdf_page=17,drawing=287
+juno++_fig8_vector	sift1m	SIFT1M	r100	R100@1000	JUNO-M	0.9299975419745754	446052.999533218	pdf_page=17,drawing=287
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.16676	8750437.522	sift1m_r100_mfnns_lbqfill_ef001_q032
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.16725	8695746.693	sift1m_r100_mfnns_lowef_ef001_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.3302	6048051.771	sift1m_r100_mfnns_lbqfill_ef002_q032
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.33083	6029817.447	sift1m_r100_mfnns_lbqfill_ef002_q064
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.33293	5816109.168	sift1m_r100_mfnns_lowef_ef002_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.42973	4687298.593	sift1m_r100_mfnns_lowef_ef003_q003
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.43005	4673606.973	sift1m_r100_mfnns_lbqfill_ef003_q048
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.43128	4617631.271	sift1m_r100_mfnns_lbqfill_ef003_q096
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.43459	4364453.707	sift1m_r100_mfnns_lowef_ef003_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.50176	4017597.075	sift1m_r100_mfnns_lowef_ef004_q016
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.50213	4016588.511	sift1m_r100_mfnns_lowef_ef004_q002
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.50236	4006029.074	sift1m_r100_mfnns_lbqfill_ef004_q032
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.50296	3989050.058	sift1m_r100_mfnns_lbqfill_ef004_q064
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.50478	3934123.109	sift1m_r100_mfnns_lbqfill_ef004_q128
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.50809	3735280.66	sift1m_r100_mfnns_lowef_ef004_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.55662	3580635.921	sift1m_r100_mfnns_lbqfill_ef005_q010
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.5568	3578633.767	sift1m_r100_mfnns_lbqfill_ef005_q040
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.5583	3558734.692	sift1m_r100_mfnns_lbqfill_ef005_q080
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.56056	3448662.35	sift1m_r100_mfnns_lbqfill_ef005_q160
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.564	3291178.818	sift1m_r100_mfnns_lowef_ef005_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.6034	3253699.049	sift1m_r100_mfnns_lbqfill_ef006_q012
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.60353	3251054.561	sift1m_r100_mfnns_lowef_ef006_q003
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.60455	3193944.282	sift1m_r100_mfnns_lbqfill_ef006_q096
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.60709	3057239.16	sift1m_r100_mfnns_lbqfill_ef006_q192
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.6105	2918919.708	sift1m_r100_mfnns_lowef_ef006_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.67591	2827364.649	sift1m_r100_mfnns_lbqfill_ef008_q064
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.67595	2788194.783	sift1m_r100_mfnns_lowef_ef008_q032
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.67777	2694745.919	sift1m_r100_mfnns_lbqfill_ef008_q128
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.68174	2609909.828	sift1m_r100_mfnns_lbqfill_ef008_q256
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.68437	2499031.625	sift1m_r100_mfnns_lowef_ef008_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.72682	2416743.197	sift1m_r100_mfnns_lbqfill_ef010_q080
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.72937	2355892.972	sift1m_r100_mfnns_lbqfill_ef010_q160
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.73563	2167293.376	sift1m_r100_mfnns_subef_ef010_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.76582	2150977.081	sift1m_r100_mfnns_lbqfill_ef012_q024
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.76599	2148810.499	sift1m_r100_mfnns_lbqfill_ef012_q048
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.76657	2128372.806	sift1m_r100_mfnns_lbqfill_ef012_q096
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.76993	2066254.449	sift1m_r100_mfnns_lbqfill_ef012_q192
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.77625	1904086.407	sift1m_r100_mfnns_lbqfill_ef012_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.81158	1867853.999	sift1m_r100_mfnns_lbqfill_ef015_q030
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.8116	1867635.97	sift1m_r100_mfnns_lbqfill_ef015_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.81227	1831610.856	sift1m_r100_mfnns_lbqfill_ef015_q120
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.81612	1757762.72	sift1m_r100_mfnns_lbqfill_ef015_q240
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.82122	1622968.247	sift1m_r100_mfnns_lbqfill_ef015_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.85863	1512004.37	sift1m_r100_mfnns_subef_ef020_q010
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.85864	1510719.499	sift1m_r100_mfnns_subef_ef020_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.85912	1507658.907	sift1m_r100_mfnns_ef020_q040
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.85986	1493166.895	sift1m_r100_mfnns_ef020_q080
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.86197	1455937.861	sift1m_r100_mfnns_lbqfill_ef020_q160
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.86724	1374927.172	sift1m_r100_mfnns_lbqfill_ef020_q320
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.87051	1288713.767	sift1m_r100_mfnns_subef_ef020_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.9109	1072028.237	sift1m_r100_mfnns_subef_ef030_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.91095	1070557.787	sift1m_r100_mfnns_subef_ef030_q007
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.91204	1042686.273	sift1m_r100_mfnns_ef030_q120
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.9155	1002758.84	sift1m_r100_mfnns_lbqfill_ef030_q240
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.92209	919171.5048	sift1m_r100_mfnns_lbqfill_ef030_q480
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.92315	892633.9844	sift1m_r100_mfnns_subef_ef030_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.93724	822179.1035	sift1m_r100_mfnns_subef_ef040_q030
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.93815	777719.1248	sift1m_r100_mfnns_ef040_q160
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.94376	736665.887	sift1m_r100_mfnns_lbqfill_ef040_q320
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.94929	665530.2737	sift1m_r100_mfnns_lbqfill_ef040_q640
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.94963	660080.1667	sift1m_r100_mfnns_subef_ef040_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.95238	654357.1187	sift1m_r100_mfnns_subef_ef050_q037
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.95403	609384.9858	sift1m_r100_mfnns_ef050_q200
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.96137	532384.2696	sift1m_r100_mfnns_subef_ef060_q045
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.96155	531544.1557	sift1m_r100_mfnns_subef_ef060_q015
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.96424	510692.9529	sift1m_r100_mfnns_subef_ef050_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.9738	404505.3809	sift1m_r100_mfnns_subef_ef060_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.97685	327942.9084	sift1m_r100_mfnns_ef080_q320
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.97729	299029.2017	sift1m_r100_mfnns_subef_ef100_q025
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.98501	278188.3954	sift1m_r100_mfnns_subef_ef080_q001
+mfnns_006_current_best_frontier	sift1m	SIFT1M	r100	R100@1000	MFNNS frontier	0.99031	205073.0457	sift1m_r100_mfnns_subef_ef100_q001
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.38000344378833995	1570731.565372682	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.5112020325994513	1427624.1573459797	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.6450005231113514	1164779.6434593091	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.7604992629215552	767751.6780371976	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.8399985009859094	452513.25247067626	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.896997751892399	242751.59623433521	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.9324973335414184	126695.0469022895	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.9518972428508545	68374.09639423693	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.960597237885229	33819.52379609954	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	+HNSW	0.9631971567834599	16955.65853727712	pdf_page=17,drawing=586
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.47000245420377307	4626258.931609023	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.6000010265023563	2760883.790831213	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.6600005145499279	1685166.6135349595	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.6900000197203469	1137488.8499296603	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.7499995077679185	834853.6211032858	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.8199985920189297	535288.8594373103	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.8999977501801142	216665.45957386066	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.9299974942039	165393.8822081507	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.9399973292607064	147010.13080551382	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.9499971643175129	116895.80937281811	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO++ frontier	0.9599972382276858	90141.71233204157	pdf_page=17,drawing=616
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-H	0.8199985920189297	535288.8594373103	pdf_page=17,drawing=596
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-H	0.8999977501801142	216665.45957386066	pdf_page=17,drawing=596
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-H	0.9299974942039	165393.8822081507	pdf_page=17,drawing=596
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-H	0.9399973292607064	147010.13080551382	pdf_page=17,drawing=596
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-H	0.9499971643175129	116895.80937281811	pdf_page=17,drawing=596
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-H	0.9599972382276858	90141.71233204157	pdf_page=17,drawing=596
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-L	0.47000245420377307	4626258.931609023	pdf_page=17,drawing=609
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-L	0.6000010265023563	2760883.790831213	pdf_page=17,drawing=609
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-L	0.6600005145499279	1685166.6135349595	pdf_page=17,drawing=609
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-L	0.6900000197203469	1137488.8499296603	pdf_page=17,drawing=609
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-L	0.7499995077679185	834853.6211032858	pdf_page=17,drawing=609
+juno++_fig8_vector	t2i1m	TTI1M	r1	R1@100	JUNO-L	0.7899988479951439	548551.9094595393	pdf_page=17,drawing=609
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.122	6108082.52	t2i1m_r1_mfnns_lowef_ef001_q001
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.163	5818224.133	t2i1m_r1_mfnns_lbqfill_ef001_q002
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.218	5720455.634	t2i1m_r1_mfnns_lowef_ef001_q004
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.225	5580785.356	t2i1m_r1_mfnns_lowef_ef002_q002
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.23	5438514.198	t2i1m_r1_mfnns_lbqfill_ef001_q008
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.238	5206672.351	t2i1m_r1_mfnns_lowef_ef004_q002
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.387	4611642.09	t2i1m_r1_mfnns_lbqfill_ef002_q004
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.418	4411383.575	t2i1m_r1_mfnns_lowef_ef002_q008
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.433	4117895.344	t2i1m_r1_mfnns_lbqfill_ef002_q016
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.502	4039914.354	t2i1m_r1_mfnns_lbqfill_ef003_q006
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.505	3915829.25	t2i1m_r1_mfnns_lowef_ef004_q004
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.529	3909132.222	t2i1m_r1_mfnns_lowef_ef003_q012
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.594	3582239.258	t2i1m_r1_mfnns_lbqfill_ef004_q008
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.645	3247754.989	t2i1m_r1_mfnns_lbqfill_ef005_q010
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.679	2918387.299	t2i1m_r1_mfnns_lbqfill_ef006_q012
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.691	2597832.758	t2i1m_r1_mfnns_ef010_q010
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.746	2532254.593	t2i1m_r1_mfnns_lbqfill_ef008_q016
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.775	2192387.483	t2i1m_r1_mfnns_ef010_q020
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.819	1988817.872	t2i1m_r1_mfnns_lbqfill_ef012_q024
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.842	1685100.969	t2i1m_r1_mfnns_lbqfill_ef015_q030
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.858	1364375.142	t2i1m_r1_mfnns_ef020_q040
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.859	1090299.019	t2i1m_r1_mfnns_subef_ef040_q030
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.882	1056525.431	t2i1m_r1_mfnns_ef020_q080
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.898	966038.9024	t2i1m_r1_mfnns_ef030_q060
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.901	926489.9696	t2i1m_r1_mfnns_ef040_q040
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.914	739184.347	t2i1m_r1_mfnns_ef030_q120
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.924	728681.069	t2i1m_r1_mfnns_ef040_q080
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.93	600861.9364	t2i1m_r1_mfnns_ef060_q060
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.938	576784.8427	t2i1m_r1_mfnns_ef050_q100
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.957	469518.286	t2i1m_r1_mfnns_ef060_q120
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.962	357921.9766	t2i1m_r1_mfnns_ef060_q240
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.972	335252.1396	t2i1m_r1_mfnns_ef080_q160
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.977	256077.9296	t2i1m_r1_mfnns_ef080_q320
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.978	254609.7358	t2i1m_r1_mfnns_ef100_q200
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.984	203253.9088	t2i1m_r1_mfnns_highef_lowqps_ef120_q240
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.987	156772.4114	t2i1m_r1_mfnns_highef_lowqps_ef120_q480
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r1	R1@100	MFNNS frontier	0.989	120499.5732	t2i1m_r1_mfnns_highef_lowqps_ef150_q600
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.38000344378833995	1423203.782636707	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.5143018715945129	1164811.2636034498	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.6476004420095822	767769.0721120496	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.7606994220429806	452522.4927174645	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.8470984173157132	242754.8598727456	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.9067976666811466	126696.58313562765	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.942197168769453	68374.36653953967	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.960597237885229	33819.501709238866	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	+HNSW	0.968396994579922	16955.58572872699	pdf_page=17,drawing=537
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.5200018683411718	4626446.910486705	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.6300007705261421	2760984.8253293824	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.6700003496067344	1685215.36730004	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.6900000197203469	1137518.519501714	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.7099999286873262	834875.1468279584	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.7899988479951439	535301.5228519908	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.8499983360427155	216668.8610470777	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.8699980061563284	165395.74732194428	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.9099978240902875	147011.98287063552	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.9449972467891097	116896.66271455804	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO++ frontier	0.9599972382276858	90142.74367291796	pdf_page=17,drawing=565
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-H	0.7199997637441327	535301.5228519908	pdf_page=17,drawing=546
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-H	0.8499983360427155	216668.8610470777	pdf_page=17,drawing=546
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-H	0.8699980061563284	165395.74732194428	pdf_page=17,drawing=546
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-H	0.9099978240902875	147011.98287063552	pdf_page=17,drawing=546
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-H	0.9449972467891097	116896.66271455804	pdf_page=17,drawing=546
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-H	0.9599972382276858	90142.74367291796	pdf_page=17,drawing=546
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-L	0.5200018683411718	4626446.910486705	pdf_page=17,drawing=558
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-L	0.6300007705261421	2760984.8253293824	pdf_page=17,drawing=558
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-L	0.6700003496067344	1685215.36730004	pdf_page=17,drawing=558
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-L	0.6900000197203469	1137518.519501714	pdf_page=17,drawing=558
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-L	0.7099999286873262	834875.1468279584	pdf_page=17,drawing=558
+juno++_fig8_vector	t2i1m	TTI1M	r100	R100@1000	JUNO-L	0.7899988479951439	548563.2029092528	pdf_page=17,drawing=558
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.08898	5466385.148	t2i1m_r100_mfnns_lbqfill_ef001_q002
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.09335	5449628.403	t2i1m_r100_mfnns_lowef_ef001_q004
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.09906	5444065.628	t2i1m_r100_mfnns_lbqfill_ef001_q008
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.10526	5428365.926	t2i1m_r100_mfnns_lbqfill_ef001_q016
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.11067	5395416.594	t2i1m_r100_mfnns_lbqfill_ef001_q032
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.11335	5299803.245	t2i1m_r100_mfnns_lowef_ef001_q001
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.14618	4192344.778	t2i1m_r100_mfnns_lowef_ef002_q008
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.18972	4113660.438	t2i1m_r100_mfnns_lbqfill_ef002_q016
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.22907	4001020.26	t2i1m_r100_mfnns_lbqfill_ef002_q032
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.24977	3857299.216	t2i1m_r100_mfnns_lbqfill_ef002_q064
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.25423	3547687.573	t2i1m_r100_mfnns_lowef_ef002_q001
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.26065	3489655.353	t2i1m_r100_mfnns_lbqfill_ef003_q024
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.31313	3326071.411	t2i1m_r100_mfnns_lbqfill_ef003_q048
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.32374	3134501.458	t2i1m_r100_mfnns_lbqfill_ef004_q032
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.33472	3108317.079	t2i1m_r100_mfnns_lbqfill_ef003_q096
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.3811	2956677.286	t2i1m_r100_mfnns_lbqfill_ef004_q064
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.4028	2702483.582	t2i1m_r100_mfnns_lbqfill_ef004_q128
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.4347	2641144.408	t2i1m_r100_mfnns_lbqfill_ef005_q080
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.45416	2362851.253	t2i1m_r100_mfnns_lbqfill_ef005_q160
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.47973	2341413.16	t2i1m_r100_mfnns_lbqfill_ef006_q096
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.49527	2216686.663	t2i1m_r100_mfnns_lbqfill_ef008_q064
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.49565	2074156.272	t2i1m_r100_mfnns_lbqfill_ef006_q192
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.55135	1981797.193	t2i1m_r100_mfnns_lbqfill_ef008_q128
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.55303	1944347.902	t2i1m_r100_mfnns_lbqfill_ef010_q080
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.60871	1707854.422	t2i1m_r100_mfnns_lbqfill_ef012_q096
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.64955	1470185.556	t2i1m_r100_mfnns_lbqfill_ef012_q192
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.66577	1463528.861	t2i1m_r100_mfnns_lbqfill_ef015_q120
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.69672	1229777.841	t2i1m_r100_mfnns_lbqfill_ef015_q240
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.73672	1148972.962	t2i1m_r100_mfnns_lbqfill_ef020_q160
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.75365	927591.0807	t2i1m_r100_mfnns_lbqfill_ef020_q320
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.75753	921766.2424	t2i1m_r100_mfnns_ef030_q120
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.81668	762105.0867	t2i1m_r100_mfnns_lbqfill_ef030_q240
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.82663	676633.4778	t2i1m_r100_mfnns_ef040_q160
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.85937	537652.8362	t2i1m_r100_mfnns_lbqfill_ef040_q320
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.86962	525048.5342	t2i1m_r100_mfnns_ef050_q200
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.89863	412100.5072	t2i1m_r100_mfnns_ef060_q240
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.9075	288322.1596	t2i1m_r100_mfnns_subef_ef060_q001
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.93211	274602.7785	t2i1m_r100_mfnns_ef080_q320
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.93436	208573.7363	t2i1m_r100_mfnns_subef_ef080_q001
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.94067	203253.9088	t2i1m_r100_mfnns_highef_lowqps_ef120_q240
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.94907	195307.0801	t2i1m_r100_mfnns_ef100_q400
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.94967	160640.7101	t2i1m_r100_mfnns_subef_ef100_q001
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.96037	156772.4114	t2i1m_r100_mfnns_highef_lowqps_ef120_q480
+mfnns_006_current_best_frontier	t2i1m	TTI1M	r100	R100@1000	MFNNS frontier	0.96963	120499.5732	t2i1m_r100_mfnns_highef_lowqps_ef150_q600

@@ -1,0 +1,5 @@
+dataset	recall_tag	panel	common_recall_low	common_recall_high	mfnns_better_intervals
+sift1m	r1	SIFT1M Recall@1	0.440003	0.992000	0.819-0.992
+t2i1m	r1	T2I1M Recall@1	0.470002	0.959997	0.512-0.960
+sift1m	r100	SIFT1M Recall@100	0.380003	0.989997	0.857-0.990
+t2i1m	r100	T2I1M Recall@100	0.520002	0.959997	0.682-0.960
