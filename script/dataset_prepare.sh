@@ -55,8 +55,9 @@ The "all" group adds Deep1B and T2I1B. Billion-scale downloads require
 --include-billion and more than 1.18 TB of space in total.
 
 This script prepares and validates raw vector files. It does not normalize
-vectors, build HNSW indexes, or recompute Figure 14 ground truth. Use the
-prepared cache documented in DATASET_ACQUISITION.md for exact reproduction.
+vectors or build derived artifacts. Run script/cpu_index_build.sh afterward;
+that command builds the index from normalized base vectors, persists
+normalized queries, and recomputes exact ground truth in the same space.
 
 Every URL can be overridden with its corresponding *_URL environment variable.
 EOF
@@ -598,5 +599,5 @@ fi
 
 if ((DRY_RUN == 0)); then
     log "Raw dataset preparation completed"
-    log "Figure 14 HNSW/query/GT cache construction is intentionally not performed"
+    log "Next: run script/cpu_index_build.sh for normalized index/query/GT artifacts"
 fi

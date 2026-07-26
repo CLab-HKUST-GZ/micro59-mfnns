@@ -28,7 +28,16 @@ ae/figure14/output/figure14_summary.tsv
 The 126 YAMLs cover `3 top-k values x 7 datasets x 6 simulator designs` and
 are under
 `simulator/run_case/figure14_recall_gt0895/configs/final/`. They are
-repository-relative rerun recipes; executing them additionally requires the
-prepared index, queries, ground truth, and existing `simulator/build/ramulator2`.
-See `simulator/run_case/figure14_recall_gt0895/README.md` for one-case
-execution.
+repository-relative rerun recipes. Build their inputs with:
+
+```bash
+script/cpu_index_build.sh \
+  deep10m t2i1m wiki1m w2v1m glove2m sift1m pubmed
+```
+
+The builder uses normalized base vectors for every index, writes normalized
+query files, and computes matching exact normalized-L2 top-5/10/100 ground
+truth. Executing a YAML also requires the existing
+`simulator/build/ramulator2`. See
+`simulator/run_case/figure14_recall_gt0895/README.md` for the full contract and
+one-case execution.

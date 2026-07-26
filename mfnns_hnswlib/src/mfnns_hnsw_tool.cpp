@@ -13,7 +13,9 @@
 #include <limits>
 #include <map>
 #include <mutex>
+#include <numeric>
 #include <queue>
+#include <random>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -364,7 +366,22 @@ std::vector<float> read_vector_rows(const fs::path& path,
                : read_fvecs_rows(path, header, start, count);
 }
 
+constexpr uint64_t FNV1A_OFFSET_BASIS = 14695981039346656037ULL;
+constexpr uint64_t FNV1A_PRIME = 1099511628211ULL;
+
+void update_fingerprint(uint64_t& fingerprint,
+                        const std::vector<float>& values) {
+    const auto* bytes =
+        reinterpret_cast<const unsigned char*>(values.data());
+    const size_t byte_count = values.size() * sizeof(float);
+    for (size_t index = 0; index < byte_count; ++index) {
+        fingerprint ^= bytes[index];
+        fingerprint *= FNV1A_PRIME;
+    }
+}
+
 void normalize_vectors(std::vector<float>& data, uint64_t rows, uint64_t dim, int threads) {
+    std::atomic<uint64_t> first_invalid{rows};
 #pragma omp parallel for num_threads(threads) schedule(static)
     for (int64_t row = 0; row < static_cast<int64_t>(rows); ++row) {
         float norm_squared = 0.0f;
@@ -373,9 +390,46 @@ void normalize_vectors(std::vector<float>& data, uint64_t rows, uint64_t dim, in
             const float value = data[offset + col];
             norm_squared += value * value;
         }
-        const float norm = std::sqrt(std::max(norm_squared, 1.0e-24f));
+        if (!std::isfinite(norm_squared) || norm_squared <= 1.0e-24f) {
+            uint64_t current = first_invalid.load(std::memory_order_relaxed);
+            while (static_cast<uint64_t>(row) < current &&
+                   !first_invalid.compare_exchange_weak(
+                       current, static_cast<uint64_t>(row),
+                       std::memory_order_relaxed)) {
+            }
+            continue;
+        }
+        const float norm = std::sqrt(norm_squared);
         for (uint64_t col = 0; col < dim; ++col) {
             data[offset + col] /= norm;
+        }
+    }
+    if (first_invalid.load(std::memory_order_relaxed) != rows) {
+        throw std::runtime_error(
+            "Cannot L2-normalize zero-norm or non-finite vector at selected row " +
+            std::to_string(first_invalid.load(std::memory_order_relaxed)));
+    }
+}
+
+void verify_unit_vectors(const std::vector<float>& data,
+                         uint64_t rows,
+                         uint64_t dim,
+                         double tolerance,
+                         const std::string& description) {
+    for (uint64_t row = 0; row < rows; ++row) {
+        double norm_squared = 0.0;
+        const size_t offset = static_cast<size_t>(row) * dim;
+        for (uint64_t col = 0; col < dim; ++col) {
+            const float value = data[offset + col];
+            norm_squared += static_cast<double>(value) * value;
+        }
+        const double norm = std::sqrt(norm_squared);
+        if (!std::isfinite(norm) || std::abs(norm - 1.0) > tolerance) {
+            std::ostringstream message;
+            message << description << " row " << row
+                    << " is not unit-normalized: norm=" << std::setprecision(10)
+                    << norm << ", tolerance=" << tolerance;
+            throw std::runtime_error(message.str());
         }
     }
 }
@@ -384,6 +438,39 @@ void ensure_parent_directory(const fs::path& path) {
     const fs::path parent = path.parent_path();
     if (!parent.empty()) {
         fs::create_directories(parent);
+    }
+}
+
+void write_build_metadata(const fs::path& path,
+                          const fs::path& index_path,
+                          const fs::path& base_path,
+                          VectorFormat base_format,
+                          uint64_t rows,
+                          uint64_t dim,
+                          uint64_t m,
+                          uint64_t ef_construction,
+                          uint64_t seed,
+                          bool normalize,
+                          uint64_t base_fingerprint) {
+    ensure_parent_directory(path);
+    std::ofstream output(path);
+    if (!output) {
+        throw std::runtime_error("Cannot create index metadata: " + path.string());
+    }
+    output << "field\tvalue\n"
+           << "format\tmfnns_hnsw_index_v1\n"
+           << "index_path\t" << fs::absolute(index_path).string() << '\n'
+           << "base_path\t" << fs::absolute(base_path).string() << '\n'
+           << "base_format\t" << vector_format_name(base_format) << '\n'
+           << "rows\t" << rows << '\n'
+           << "dimension\t" << dim << '\n'
+           << "M\t" << m << '\n'
+           << "ef_construction\t" << ef_construction << '\n'
+           << "seed\t" << seed << '\n'
+           << "base_fingerprint_fnv1a64\t" << base_fingerprint << '\n'
+           << "normalization\t" << (normalize ? "l2" : "none") << '\n';
+    if (!output) {
+        throw std::runtime_error("Failed while writing index metadata: " + path.string());
     }
 }
 
@@ -396,9 +483,11 @@ int checked_thread_count(uint64_t value) {
 
 void print_usage(std::ostream& output) {
     output
-        << "mfnns_hnsw_tool: build, inspect, and evaluate MFNNS HNSW indexes\n\n"
+        << "mfnns_hnsw_tool: build/inspect indexes and prepare/evaluate data\n\n"
         << "Usage:\n"
         << "  mfnns_hnsw_tool build --base BASE --index OUT.bin [options]\n"
+        << "  mfnns_hnsw_tool prepare --base BASE --queries QUERY "
+           "--output-dir DIR [options]\n"
         << "  mfnns_hnsw_tool inspect --index INDEX.bin\n"
         << "  mfnns_hnsw_tool evaluate --base BASE.fbin --queries QUERY.fbin "
            "--index INDEX.bin [options]\n\n"
@@ -412,7 +501,18 @@ void print_usage(std::ostream& output) {
         << "  --insertion-threads N    HNSW construction threads (default: --threads)\n"
         << "  --batch-size N           Streaming batch rows (default: 100000)\n"
         << "  --seed N                 HNSW random seed (default: 100)\n"
-        << "  --force 0|1              Replace an existing output index (default: 0)\n\n"
+        << "  --force 0|1              Replace an existing output index (default: 0)\n"
+        << "  --metadata FILE          Write normalization/build provenance after success\n\n"
+        << "Prepare options:\n"
+        << "  --base-format FORMAT     fbin or fvecs (default: fbin)\n"
+        << "  --query-format FORMAT    fbin or fvecs (default: fbin)\n"
+        << "  --query-count N          Output query rows (default: 1000)\n"
+        << "  --seed N                 Deterministic query-selection seed (default: 42)\n"
+        << "  --gt-k-list LIST         Exact-GT widths (default: 5,10,100)\n"
+        << "  --normalize 0|1          L2-normalize base/query vectors (default: 1)\n"
+        << "  --threads N              Normalization/exact-GT threads (default: 1)\n"
+        << "  --batch-size N           Streaming exact-GT base rows (default: 100000)\n"
+        << "  --force 0|1              Replace a complete/partial bundle (default: 0)\n\n"
         << "Evaluate options:\n"
         << "  --normalize 0|1          L2-normalize base/query vectors (default: 1)\n"
         << "  --query-limit N          Number of query rows (default: 10)\n"
@@ -450,7 +550,8 @@ void run_inspect(const Options& options) {
 void run_build(const Options& options) {
     options.reject_unknown({"help", "base", "base-format", "index", "normalize",
                             "limit", "m", "ef-construction", "threads",
-                            "insertion-threads", "batch-size", "seed", "force"});
+                            "insertion-threads", "batch-size", "seed", "force",
+                            "metadata"});
     if (options.has("help")) {
         print_usage(std::cout);
         return;
@@ -501,10 +602,12 @@ void run_build(const Options& options) {
 
     const auto started = Clock::now();
     uint64_t inserted = 0;
+    uint64_t base_fingerprint = FNV1A_OFFSET_BASIS;
     while (inserted < rows) {
         const uint64_t count = std::min(batch_size, rows - inserted);
         std::vector<float> batch =
             read_vector_rows(base_path, base_header, base_format, inserted, count);
+        update_fingerprint(base_fingerprint, batch);
         if (normalize) {
             normalize_vectors(batch, count, base_header.dim, threads);
         }
@@ -578,6 +681,12 @@ void run_build(const Options& options) {
         output_header.m != m || output_header.ef_construction != ef_construction) {
         throw std::runtime_error("Serialized index header does not match requested build");
     }
+    if (options.has("metadata")) {
+        write_build_metadata(
+            options.require("metadata"), index_path, base_path, base_format, rows,
+            base_header.dim, m, ef_construction, seed, normalize,
+            base_fingerprint);
+    }
 
     const double total_seconds =
         std::chrono::duration<double>(Clock::now() - started).count();
@@ -592,35 +701,35 @@ void run_build(const Options& options) {
               << " index_bytes=" << fs::file_size(index_path) << std::endl;
 }
 
-float squared_l2(const float* lhs, const float* rhs, uint64_t dim) {
-    float distance = 0.0f;
-#pragma omp simd reduction(+ : distance)
-    for (uint64_t col = 0; col < dim; ++col) {
-        const float delta = lhs[col] - rhs[col];
-        distance += delta * delta;
-    }
-    return distance;
-}
-
 using DistanceLabel = std::pair<float, Label>;
 using MaxHeap = std::priority_queue<DistanceLabel>;
 
 std::vector<std::vector<Label>> compute_exact_ground_truth(
     const fs::path& base_path,
     const FbinHeader& base_header,
+    VectorFormat base_format,
     uint64_t rows,
     const std::vector<float>& queries,
     uint64_t query_count,
     uint64_t k,
     uint64_t batch_size,
     bool normalize,
-    int threads) {
+    int threads,
+    uint64_t* base_fingerprint) {
     std::vector<MaxHeap> heaps(query_count);
+    hnswlib::L2SpaceDynamicPrecision exact_space(
+        base_header.dim, hnswlib::PrecisionType::FP32);
+    hnswlib::DISTFUNC<float> exact_distance = exact_space.get_dist_func();
+    void* exact_distance_parameter = exact_space.get_dist_func_param();
     uint64_t processed = 0;
     const auto started = Clock::now();
     while (processed < rows) {
         const uint64_t count = std::min(batch_size, rows - processed);
-        std::vector<float> batch = read_fbin_rows(base_path, base_header, processed, count);
+        std::vector<float> batch =
+            read_vector_rows(base_path, base_header, base_format, processed, count);
+        if (base_fingerprint != nullptr) {
+            update_fingerprint(*base_fingerprint, batch);
+        }
         if (normalize) {
             normalize_vectors(batch, count, base_header.dim, threads);
         }
@@ -633,7 +742,7 @@ std::vector<std::vector<Label>> compute_exact_ground_truth(
             for (uint64_t row = 0; row < count; ++row) {
                 const float* point = batch.data() + row * base_header.dim;
                 const DistanceLabel candidate{
-                    squared_l2(query, point, base_header.dim),
+                    exact_distance(query, point, exact_distance_parameter),
                     static_cast<Label>(processed + row)};
                 if (heap.size() < k) {
                     heap.push(candidate);
@@ -662,6 +771,576 @@ std::vector<std::vector<Label>> compute_exact_ground_truth(
         std::reverse(labels.begin(), labels.end());
     }
     return ground_truth;
+}
+
+std::vector<uint64_t> parse_positive_integer_list(const std::string& text,
+                                                  const std::string& option_name) {
+    std::vector<uint64_t> values;
+    std::stringstream stream(text);
+    std::string token;
+    while (std::getline(stream, token, ',')) {
+        if (token.empty()) {
+            throw std::runtime_error("Empty integer in --" + option_name);
+        }
+        size_t consumed = 0;
+        const unsigned long long value = std::stoull(token, &consumed);
+        if (consumed != token.size() || value == 0) {
+            throw std::runtime_error(
+                "Invalid positive integer in --" + option_name + ": " + token);
+        }
+        values.push_back(static_cast<uint64_t>(value));
+    }
+    if (values.empty()) {
+        throw std::runtime_error("--" + option_name + " cannot be empty");
+    }
+    std::sort(values.begin(), values.end());
+    values.erase(std::unique(values.begin(), values.end()), values.end());
+    return values;
+}
+
+std::string join_integer_list(const std::vector<uint64_t>& values) {
+    std::ostringstream output;
+    for (size_t index = 0; index < values.size(); ++index) {
+        if (index != 0) {
+            output << ',';
+        }
+        output << values[index];
+    }
+    return output.str();
+}
+
+std::vector<uint64_t> select_query_indices(uint64_t available,
+                                           uint64_t requested,
+                                           uint64_t seed) {
+    if (available == 0 || requested == 0) {
+        throw std::runtime_error("Query source and requested query count must be nonzero");
+    }
+    if (seed > std::numeric_limits<uint32_t>::max()) {
+        throw std::runtime_error("--seed must fit uint32 for deterministic selection");
+    }
+    std::vector<uint64_t> indices;
+    indices.reserve(static_cast<size_t>(requested));
+    if (requested <= available) {
+        indices.resize(static_cast<size_t>(available));
+        std::iota(indices.begin(), indices.end(), uint64_t{0});
+        std::mt19937 random(static_cast<uint32_t>(seed));
+        std::shuffle(indices.begin(), indices.end(), random);
+        indices.resize(static_cast<size_t>(requested));
+        std::sort(indices.begin(), indices.end());
+    } else {
+        for (uint64_t index = 0; index < requested; ++index) {
+            indices.push_back(index % available);
+        }
+    }
+    return indices;
+}
+
+void write_float_matrix(const fs::path& path,
+                        const std::vector<float>& values,
+                        uint64_t rows,
+                        uint64_t cols) {
+    if (rows > static_cast<uint64_t>(std::numeric_limits<int32_t>::max()) ||
+        cols > static_cast<uint64_t>(std::numeric_limits<int32_t>::max()) ||
+        values.size() != checked_product(rows, cols, "float matrix values")) {
+        throw std::runtime_error("Float matrix shape is not serializable: " + path.string());
+    }
+    ensure_parent_directory(path);
+    std::ofstream output(path, std::ios::binary | std::ios::trunc);
+    if (!output) {
+        throw std::runtime_error("Cannot create float matrix: " + path.string());
+    }
+    const int32_t output_rows = static_cast<int32_t>(rows);
+    const int32_t output_cols = static_cast<int32_t>(cols);
+    output.write(reinterpret_cast<const char*>(&output_rows), sizeof(output_rows));
+    output.write(reinterpret_cast<const char*>(&output_cols), sizeof(output_cols));
+    output.write(
+        reinterpret_cast<const char*>(values.data()),
+        static_cast<std::streamsize>(values.size() * sizeof(float)));
+    if (!output) {
+        throw std::runtime_error("Failed while writing float matrix: " + path.string());
+    }
+}
+
+void write_query_indices(const fs::path& path,
+                         const std::vector<uint64_t>& indices) {
+    if (indices.size() >
+        static_cast<size_t>(std::numeric_limits<int32_t>::max())) {
+        throw std::runtime_error("Too many query indices to serialize");
+    }
+    std::vector<int32_t> serialized;
+    serialized.reserve(indices.size());
+    for (uint64_t index : indices) {
+        if (index > static_cast<uint64_t>(std::numeric_limits<int32_t>::max())) {
+            throw std::runtime_error("Query source index does not fit int32");
+        }
+        serialized.push_back(static_cast<int32_t>(index));
+    }
+    ensure_parent_directory(path);
+    std::ofstream output(path, std::ios::binary | std::ios::trunc);
+    if (!output) {
+        throw std::runtime_error("Cannot create query-index file: " + path.string());
+    }
+    const int32_t count = static_cast<int32_t>(serialized.size());
+    output.write(reinterpret_cast<const char*>(&count), sizeof(count));
+    output.write(
+        reinterpret_cast<const char*>(serialized.data()),
+        static_cast<std::streamsize>(serialized.size() * sizeof(int32_t)));
+    if (!output) {
+        throw std::runtime_error("Failed while writing query-index file: " + path.string());
+    }
+}
+
+void write_ground_truth(const fs::path& path,
+                        const std::vector<std::vector<Label>>& ground_truth,
+                        uint64_t k) {
+    if (ground_truth.empty() ||
+        ground_truth.size() >
+            static_cast<size_t>(std::numeric_limits<int32_t>::max()) ||
+        k > static_cast<uint64_t>(std::numeric_limits<int32_t>::max())) {
+        throw std::runtime_error("Ground-truth shape is not serializable");
+    }
+    ensure_parent_directory(path);
+    std::ofstream output(path, std::ios::binary | std::ios::trunc);
+    if (!output) {
+        throw std::runtime_error("Cannot create ground-truth file: " + path.string());
+    }
+    const int32_t rows = static_cast<int32_t>(ground_truth.size());
+    const int32_t cols = static_cast<int32_t>(k);
+    output.write(reinterpret_cast<const char*>(&rows), sizeof(rows));
+    output.write(reinterpret_cast<const char*>(&cols), sizeof(cols));
+    for (const auto& labels : ground_truth) {
+        if (labels.size() < k) {
+            throw std::runtime_error("Ground-truth row is shorter than requested output");
+        }
+        for (uint64_t column = 0; column < k; ++column) {
+            const Label label = labels[static_cast<size_t>(column)];
+            if (label > static_cast<Label>(std::numeric_limits<uint32_t>::max())) {
+                throw std::runtime_error("Ground-truth label does not fit uint32");
+            }
+            const uint32_t serialized = static_cast<uint32_t>(label);
+            output.write(
+                reinterpret_cast<const char*>(&serialized), sizeof(serialized));
+        }
+    }
+    if (!output) {
+        throw std::runtime_error("Failed while writing ground-truth file: " + path.string());
+    }
+}
+
+std::vector<uint32_t> read_uint_matrix(const fs::path& path,
+                                       uint64_t expected_rows,
+                                       uint64_t expected_cols) {
+    std::ifstream input(path, std::ios::binary);
+    if (!input) {
+        throw std::runtime_error("Cannot open uint32 matrix: " + path.string());
+    }
+    int32_t rows = 0;
+    int32_t cols = 0;
+    read_pod(input, rows, "matrix row count from " + path.string());
+    read_pod(input, cols, "matrix column count from " + path.string());
+    if (rows <= 0 || cols <= 0 ||
+        static_cast<uint64_t>(rows) != expected_rows ||
+        static_cast<uint64_t>(cols) != expected_cols) {
+        throw std::runtime_error("Unexpected matrix shape in " + path.string());
+    }
+    const uint64_t count = checked_product(expected_rows, expected_cols, "uint32 matrix");
+    const uint64_t expected_bytes =
+        8 + checked_product(count, sizeof(uint32_t), "uint32 matrix bytes");
+    if (fs::file_size(path) != expected_bytes ||
+        count > std::numeric_limits<size_t>::max()) {
+        throw std::runtime_error("Unexpected matrix size in " + path.string());
+    }
+    std::vector<uint32_t> values(static_cast<size_t>(count));
+    input.read(
+        reinterpret_cast<char*>(values.data()),
+        static_cast<std::streamsize>(values.size() * sizeof(uint32_t)));
+    if (!input) {
+        throw std::runtime_error("Failed while reading uint32 matrix: " + path.string());
+    }
+    return values;
+}
+
+fs::path query_output_path(const fs::path& output_dir,
+                           uint64_t query_count,
+                           uint64_t seed) {
+    return output_dir /
+           ("query_vectors_n" + std::to_string(query_count) + "_seed" +
+            std::to_string(seed) + ".bin");
+}
+
+fs::path query_indices_output_path(const fs::path& output_dir,
+                                   uint64_t query_count,
+                                   uint64_t seed) {
+    return output_dir /
+           ("query_indices_n" + std::to_string(query_count) + "_seed" +
+            std::to_string(seed) + ".bin");
+}
+
+fs::path ground_truth_output_path(const fs::path& output_dir,
+                                  uint64_t k,
+                                  uint64_t query_count,
+                                  uint64_t seed) {
+    return output_dir /
+           ("gt_labels_topk" + std::to_string(k) + "_n" +
+            std::to_string(query_count) + "_seed" + std::to_string(seed) +
+            ".bin");
+}
+
+fs::path bundle_metadata_path(const fs::path& output_dir,
+                              uint64_t query_count,
+                              uint64_t seed) {
+    return output_dir /
+           ("bundle_metadata_n" + std::to_string(query_count) + "_seed" +
+            std::to_string(seed) + ".tsv");
+}
+
+void write_bundle_metadata(const fs::path& path,
+                           const fs::path& base_path,
+                           const fs::path& query_path,
+                           VectorFormat base_format,
+                           VectorFormat query_format,
+                           const FbinHeader& base_header,
+                           const FbinHeader& query_header,
+                           uint64_t query_count,
+                           uint64_t unique_query_count,
+                           uint64_t seed,
+                           const std::vector<uint64_t>& gt_k_values,
+                           bool normalize,
+                           uint64_t base_fingerprint,
+                           uint64_t query_source_fingerprint) {
+    ensure_parent_directory(path);
+    std::ofstream output(path);
+    if (!output) {
+        throw std::runtime_error("Cannot create bundle metadata: " + path.string());
+    }
+    output << "field\tvalue\n"
+           << "format\tmfnns_normalized_query_gt_v1\n"
+           << "base_path\t" << fs::absolute(base_path).string() << '\n'
+           << "query_source_path\t" << fs::absolute(query_path).string() << '\n'
+           << "base_format\t" << vector_format_name(base_format) << '\n'
+           << "query_source_format\t" << vector_format_name(query_format) << '\n'
+           << "base_rows\t" << base_header.rows << '\n'
+           << "query_source_rows\t" << query_header.rows << '\n'
+           << "dimension\t" << base_header.dim << '\n'
+           << "query_count\t" << query_count << '\n'
+           << "unique_query_count\t" << unique_query_count << '\n'
+           << "seed\t" << seed << '\n'
+           << "gt_k_list\t" << join_integer_list(gt_k_values) << '\n'
+           << "base_fingerprint_fnv1a64\t" << base_fingerprint << '\n'
+           << "query_source_fingerprint_fnv1a64\t"
+           << query_source_fingerprint << '\n'
+           << "normalization\t" << (normalize ? "l2" : "none") << '\n'
+           << "distance\tl2\n";
+    if (!output) {
+        throw std::runtime_error("Failed while writing bundle metadata: " + path.string());
+    }
+}
+
+void verify_cached_bundle(const fs::path& output_dir,
+                          const fs::path& base_path,
+                          const fs::path& query_source_path,
+                          VectorFormat base_format,
+                          VectorFormat query_format,
+                          const FbinHeader& base_header,
+                          const FbinHeader& query_source_header,
+                          uint64_t query_count,
+                          uint64_t seed,
+                          const std::vector<uint64_t>& gt_k_values,
+                          bool normalize) {
+    const fs::path query_path =
+        query_output_path(output_dir, query_count, seed);
+    const FbinHeader query_header = read_fbin_header(query_path);
+    if (query_header.rows != query_count ||
+        query_header.dim != base_header.dim) {
+        throw std::runtime_error("Cached query shape mismatch: " + query_path.string());
+    }
+    const std::vector<float> queries =
+        read_fbin_rows(query_path, query_header, 0, query_header.rows);
+    if (normalize) {
+        verify_unit_vectors(
+            queries, query_header.rows, query_header.dim, 2.0e-5,
+            "Cached query");
+    }
+
+    const fs::path indices_path =
+        query_indices_output_path(output_dir, query_count, seed);
+    std::ifstream indices_input(indices_path, std::ios::binary);
+    if (!indices_input) {
+        throw std::runtime_error(
+            "Cannot open cached query indices: " + indices_path.string());
+    }
+    int32_t index_count = 0;
+    read_pod(indices_input, index_count, "cached query-index count");
+    if (index_count <= 0 || static_cast<uint64_t>(index_count) != query_count ||
+        fs::file_size(indices_path) !=
+            sizeof(int32_t) +
+                checked_product(query_count, sizeof(int32_t), "query-index bytes")) {
+        throw std::runtime_error(
+            "Cached query-index size mismatch: " + indices_path.string());
+    }
+    for (uint64_t row = 0; row < query_count; ++row) {
+        int32_t index = -1;
+        read_pod(indices_input, index, "cached query-source index");
+        if (index < 0 ||
+            static_cast<uint64_t>(index) >= query_source_header.rows) {
+            throw std::runtime_error(
+                "Cached query-source index is out of range: " +
+                indices_path.string());
+        }
+    }
+
+    std::vector<uint32_t> widest;
+    const uint64_t widest_k = gt_k_values.back();
+    for (uint64_t k : gt_k_values) {
+        const fs::path gt_path =
+            ground_truth_output_path(output_dir, k, query_count, seed);
+        std::vector<uint32_t> labels =
+            read_uint_matrix(gt_path, query_count, k);
+        for (uint32_t label : labels) {
+            if (label >= base_header.rows) {
+                throw std::runtime_error(
+                    "Cached ground-truth label is out of range: " +
+                    gt_path.string());
+            }
+        }
+        if (k == widest_k) {
+            widest = std::move(labels);
+        }
+    }
+    for (uint64_t k : gt_k_values) {
+        if (k == widest_k) {
+            continue;
+        }
+        const fs::path gt_path =
+            ground_truth_output_path(output_dir, k, query_count, seed);
+        const std::vector<uint32_t> labels =
+            read_uint_matrix(gt_path, query_count, k);
+        for (uint64_t row = 0; row < query_count; ++row) {
+            for (uint64_t column = 0; column < k; ++column) {
+                if (labels[static_cast<size_t>(row * k + column)] !=
+                    widest[static_cast<size_t>(row * widest_k + column)]) {
+                    throw std::runtime_error(
+                        "Cached ground-truth prefix mismatch: " +
+                        gt_path.string());
+                }
+            }
+        }
+    }
+
+    const fs::path metadata =
+        bundle_metadata_path(output_dir, query_count, seed);
+    std::ifstream metadata_input(metadata);
+    if (!metadata_input) {
+        throw std::runtime_error(
+            "Cannot open bundle metadata: " + metadata.string());
+    }
+    const std::string metadata_text(
+        (std::istreambuf_iterator<char>(metadata_input)),
+        std::istreambuf_iterator<char>());
+    const std::string expected_normalization =
+        std::string("normalization\t") + (normalize ? "l2\n" : "none\n");
+    const std::vector<float> source_queries =
+        read_vector_rows(
+            query_source_path, query_source_header, query_format, 0,
+            query_source_header.rows);
+    uint64_t query_source_fingerprint = FNV1A_OFFSET_BASIS;
+    update_fingerprint(query_source_fingerprint, source_queries);
+    const std::vector<std::string> expected_fields{
+        "base_path\t" + fs::absolute(base_path).string() + "\n",
+        "query_source_path\t" + fs::absolute(query_source_path).string() + "\n",
+        "base_format\t" + std::string(vector_format_name(base_format)) + "\n",
+        "query_source_format\t" +
+            std::string(vector_format_name(query_format)) + "\n",
+        "base_rows\t" + std::to_string(base_header.rows) + "\n",
+        "query_source_rows\t" + std::to_string(query_source_header.rows) + "\n",
+        "dimension\t" + std::to_string(base_header.dim) + "\n",
+        "query_count\t" + std::to_string(query_count) + "\n",
+        "seed\t" + std::to_string(seed) + "\n",
+        "gt_k_list\t" + join_integer_list(gt_k_values) + "\n",
+        "query_source_fingerprint_fnv1a64\t" +
+            std::to_string(query_source_fingerprint) + "\n",
+    };
+    if (metadata_text.find("format\tmfnns_normalized_query_gt_v1\n") ==
+            std::string::npos ||
+        metadata_text.find(expected_normalization) == std::string::npos) {
+        throw std::runtime_error(
+            "Bundle metadata does not match requested policy: " +
+            metadata.string());
+    }
+    for (const std::string& field : expected_fields) {
+        if (metadata_text.find(field) == std::string::npos) {
+            throw std::runtime_error(
+                "Bundle metadata is stale or mismatched at field " + field +
+                "in " + metadata.string());
+        }
+    }
+}
+
+void run_prepare(const Options& options) {
+    options.reject_unknown(
+        {"help", "base", "base-format", "queries", "query-format",
+         "output-dir", "query-count", "seed", "gt-k-list", "normalize",
+         "threads", "batch-size", "force"});
+    if (options.has("help")) {
+        print_usage(std::cout);
+        return;
+    }
+
+    const fs::path base_path = options.require("base");
+    const fs::path query_source_path = options.require("queries");
+    const fs::path output_dir = options.require("output-dir");
+    const VectorFormat base_format =
+        parse_vector_format(options.get("base-format", "fbin"));
+    const VectorFormat query_format =
+        parse_vector_format(options.get("query-format", "fbin"));
+    const FbinHeader base_header =
+        read_vector_header(base_path, base_format);
+    const FbinHeader query_source_header =
+        read_vector_header(query_source_path, query_format);
+    const uint64_t query_count = options.get_u64("query-count", 1000);
+    const uint64_t seed = options.get_u64("seed", 42);
+    const std::vector<uint64_t> gt_k_values =
+        parse_positive_integer_list(
+            options.get("gt-k-list", "5,10,100"), "gt-k-list");
+    const bool normalize = options.get_bool("normalize", true);
+    const bool force = options.get_bool("force", false);
+    const int threads =
+        checked_thread_count(options.get_u64("threads", 1));
+    const uint64_t batch_size =
+        options.get_u64("batch-size", 100000);
+
+    if (query_count == 0 || batch_size == 0 ||
+        base_header.dim != query_source_header.dim ||
+        gt_k_values.back() > base_header.rows) {
+        throw std::runtime_error(
+            "Require matching dimensions, nonzero query/batch counts, and "
+            "every GT k <= base rows");
+    }
+
+    std::vector<fs::path> outputs{
+        query_output_path(output_dir, query_count, seed),
+        query_indices_output_path(output_dir, query_count, seed),
+        bundle_metadata_path(output_dir, query_count, seed),
+    };
+    for (uint64_t k : gt_k_values) {
+        outputs.push_back(
+            ground_truth_output_path(output_dir, k, query_count, seed));
+    }
+    size_t existing = 0;
+    for (const fs::path& path : outputs) {
+        existing += fs::exists(path);
+    }
+    if (existing == outputs.size() && !force) {
+        verify_cached_bundle(
+            output_dir, base_path, query_source_path, base_format, query_format,
+            base_header, query_source_header, query_count, seed, gt_k_values,
+            normalize);
+        std::cout << "RESULT command=prepare status=cached"
+                  << " queries=" << query_count
+                  << " gt_k_list=" << join_integer_list(gt_k_values)
+                  << " normalization=" << (normalize ? "l2" : "none")
+                  << " output_dir=" << fs::absolute(output_dir) << std::endl;
+        return;
+    }
+    if (existing != 0 && !force) {
+        throw std::runtime_error(
+            "Partial query/GT bundle exists; pass --force 1 to replace it: " +
+            output_dir.string());
+    }
+
+    const std::vector<uint64_t> selected_indices =
+        select_query_indices(query_source_header.rows, query_count, seed);
+    const std::vector<float> source_queries =
+        read_vector_rows(
+            query_source_path, query_source_header, query_format, 0,
+            query_source_header.rows);
+    uint64_t query_source_fingerprint = FNV1A_OFFSET_BASIS;
+    update_fingerprint(query_source_fingerprint, source_queries);
+    const uint64_t selected_values =
+        checked_product(query_count, query_source_header.dim, "selected queries");
+    if (selected_values > std::numeric_limits<size_t>::max()) {
+        throw std::runtime_error("Selected query matrix is too large");
+    }
+    std::vector<float> queries(static_cast<size_t>(selected_values));
+    for (uint64_t row = 0; row < query_count; ++row) {
+        const uint64_t source_row =
+            selected_indices[static_cast<size_t>(row)];
+        std::copy_n(
+            source_queries.data() + source_row * query_source_header.dim,
+            query_source_header.dim,
+            queries.data() + row * query_source_header.dim);
+    }
+    if (normalize) {
+        normalize_vectors(
+            queries, query_count, query_source_header.dim, threads);
+        verify_unit_vectors(
+            queries, query_count, query_source_header.dim, 2.0e-5,
+            "Generated query");
+    }
+
+    std::unordered_map<uint64_t, uint64_t> unique_positions;
+    std::vector<uint64_t> query_to_unique(query_count);
+    std::vector<float> unique_queries;
+    unique_queries.reserve(queries.size());
+    for (uint64_t row = 0; row < query_count; ++row) {
+        const uint64_t source_row =
+            selected_indices[static_cast<size_t>(row)];
+        const auto inserted = unique_positions.emplace(
+            source_row, unique_positions.size());
+        const uint64_t unique_row = inserted.first->second;
+        query_to_unique[static_cast<size_t>(row)] = unique_row;
+        if (inserted.second) {
+            const float* begin =
+                queries.data() + row * query_source_header.dim;
+            unique_queries.insert(
+                unique_queries.end(), begin,
+                begin + query_source_header.dim);
+        }
+    }
+
+    omp_set_dynamic(0);
+    const uint64_t unique_count = unique_positions.size();
+    uint64_t base_fingerprint = FNV1A_OFFSET_BASIS;
+    const std::vector<std::vector<Label>> unique_ground_truth =
+        compute_exact_ground_truth(
+            base_path, base_header, base_format, base_header.rows,
+            unique_queries, unique_count, gt_k_values.back(), batch_size,
+            normalize, threads, &base_fingerprint);
+    std::vector<std::vector<Label>> ground_truth(query_count);
+    for (uint64_t row = 0; row < query_count; ++row) {
+        ground_truth[static_cast<size_t>(row)] =
+            unique_ground_truth[
+                static_cast<size_t>(query_to_unique[static_cast<size_t>(row)])];
+    }
+
+    fs::create_directories(output_dir);
+    write_float_matrix(
+        query_output_path(output_dir, query_count, seed), queries,
+        query_count, query_source_header.dim);
+    write_query_indices(
+        query_indices_output_path(output_dir, query_count, seed),
+        selected_indices);
+    for (uint64_t k : gt_k_values) {
+        write_ground_truth(
+            ground_truth_output_path(output_dir, k, query_count, seed),
+            ground_truth, k);
+    }
+    write_bundle_metadata(
+        bundle_metadata_path(output_dir, query_count, seed), base_path,
+        query_source_path, base_format, query_format, base_header,
+        query_source_header, query_count, unique_count, seed, gt_k_values,
+        normalize, base_fingerprint, query_source_fingerprint);
+    verify_cached_bundle(
+        output_dir, base_path, query_source_path, base_format, query_format,
+        base_header, query_source_header, query_count, seed, gt_k_values,
+        normalize);
+
+    std::cout << "RESULT command=prepare status=generated"
+              << " queries=" << query_count
+              << " unique_queries=" << unique_count
+              << " gt_k_list=" << join_integer_list(gt_k_values)
+              << " normalization=" << (normalize ? "l2" : "none")
+              << " output_dir=" << fs::absolute(output_dir) << std::endl;
 }
 
 struct PrecisionConfig {
@@ -841,8 +1520,8 @@ void run_evaluate(const Options& options) {
 
     const auto gt_started = Clock::now();
     const auto ground_truth = compute_exact_ground_truth(
-        base_path, base_header, index_header.current_elements, queries, query_limit, k,
-        batch_size, normalize, threads);
+        base_path, base_header, VectorFormat::FBIN, index_header.current_elements,
+        queries, query_limit, k, batch_size, normalize, threads, nullptr);
     const double gt_seconds =
         std::chrono::duration<double>(Clock::now() - gt_started).count();
     std::cout << "[evaluate] exact_gt_s=" << std::fixed << std::setprecision(6)
@@ -917,6 +1596,8 @@ int main(int argc, char** argv) {
         const Options options(argc, argv, 2);
         if (command == "build") {
             run_build(options);
+        } else if (command == "prepare") {
+            run_prepare(options);
         } else if (command == "inspect") {
             run_inspect(options);
         } else if (command == "evaluate") {

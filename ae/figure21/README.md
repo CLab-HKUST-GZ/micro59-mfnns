@@ -12,7 +12,9 @@ bash ae/figure21/reproduce_figure21.sh
 Validation parses and verifies 243 MFNNS YAMLs (queue sizes 20--100 at
 `ef_search` 20, 30, and 40), three ANSMET YAMLs, the frozen sweep, and the
 included query/ground-truth digests. It prints
-`CHECK_OK sweep=243 ansmet=3 configs=246 ...`. Reproduction writes:
+`CHECK_OK sweep=243 ansmet=3 configs=246 normalized_queries=100 ...`.
+The validator reads every query value and requires each row's L2 norm to be
+within `2e-5` of one. Reproduction writes:
 
 ```text
 ae/figure21/output/figure21.pdf
@@ -44,3 +46,8 @@ python3 ae/figure21/run_figure21_sweep.py \
 The runner generates task-specific runtime YAMLs, reuses
 `simulator/build/ramulator2`, and refuses an implicit full 246-case sweep.
 Use `ae/figure21/summarize_rerun.py RESULT_ROOT` after jobs finish.
+
+The index builder always inserts normalized base vectors and additionally
+creates its standard normalized `n1000/seed42` query/GT bundle. Figure 21
+continues to use its separately versioned and checksum-verified
+`n100/seed42/top32` query/GT pair; both follow the same normalized-L2 policy.

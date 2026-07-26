@@ -42,9 +42,10 @@ those scripts through the Figure 18 validator; it never executes them.
 The quick start reproduces the paper figures from the versioned data. Rerunning
 the source experiments is a separate, resource-intensive task:
 
-- Figure 14 uses repository-relative, directly runnable YAMLs after the
-  prepared indexes/queries/ground truth and existing simulator build are
-  available.
+- Figure 14 uses repository-relative, directly runnable YAMLs.
+  `script/cpu_index_build.sh` creates their indexes from normalized base
+  vectors and simultaneously writes normalized queries and exact matching
+  ground truth.
 - Figure 18 needs DP1B/T2I1B inputs and a big-memory node. Its archived YAMLs
   intentionally preserve historical input paths; the runner creates portable
   runtime copies from reviewer-supplied paths.

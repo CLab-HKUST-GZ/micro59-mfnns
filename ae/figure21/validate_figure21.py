@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import math
 import re
+import struct
 from pathlib import Path
 
 import yaml
@@ -55,6 +57,42 @@ def extract_text(text: str, key: str) -> str:
     if match is None:
         raise ValueError(f"Missing {key}")
     return match.group(1)
+
+
+def validate_normalized_query_and_gt() -> None:
+    query_path = SCRIPT_DIR / "inputs/query_vectors_n100_seed42.bin"
+    with query_path.open("rb") as stream:
+        rows, dimensions = struct.unpack("<II", stream.read(8))
+        payload = stream.read()
+    if (rows, dimensions) != (100, 200):
+        raise ValueError(f"Unexpected Figure 21 query shape: {rows}x{dimensions}")
+    if len(payload) != rows * dimensions * 4:
+        raise ValueError("Figure 21 query payload size mismatch")
+    values = struct.unpack(f"<{rows * dimensions}f", payload)
+    for row in range(rows):
+        offset = row * dimensions
+        norm = math.sqrt(
+            math.fsum(
+                value * value
+                for value in values[offset : offset + dimensions]
+            )
+        )
+        if not math.isfinite(norm) or abs(norm - 1.0) > 2.0e-5:
+            raise ValueError(
+                f"Figure 21 query row {row} is not L2-normalized: {norm}"
+            )
+
+    gt_path = SCRIPT_DIR / "inputs/gt_labels_topk32_n100_seed42.bin"
+    with gt_path.open("rb") as stream:
+        gt_rows, gt_k = struct.unpack("<II", stream.read(8))
+        gt_payload = stream.read()
+    if (gt_rows, gt_k) != (rows, 32):
+        raise ValueError(f"Unexpected Figure 21 GT shape: {gt_rows}x{gt_k}")
+    if len(gt_payload) != gt_rows * gt_k * 4:
+        raise ValueError("Figure 21 GT payload size mismatch")
+    labels = struct.unpack(f"<{gt_rows * gt_k}I", gt_payload)
+    if any(label >= 1_000_000 for label in labels):
+        raise ValueError("Figure 21 GT contains an out-of-range T2I1M label")
 
 
 def main() -> None:
@@ -196,10 +234,12 @@ def main() -> None:
         if sha256(path) != row["sha256"]:
             raise ValueError(f"Input digest mismatch: {path}")
 
+    validate_normalized_query_and_gt()
+
     print(
         "CHECK_OK "
         "sweep=243 ansmet=3 configs=246 "
-        f"global_max_cycle={global_max:.0f}"
+        f"normalized_queries=100 global_max_cycle={global_max:.0f}"
     )
 
 
