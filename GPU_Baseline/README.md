@@ -81,18 +81,50 @@ Both runners accept `--only ID[,ID...]` for a smoke test and refuse to start
 on a GPU that already has a compute process unless `--allow-busy-gpu` is
 given.
 
-## 3. Fast regression tests
+## 3. Validation status and Pubmed qualification
+
+The workflow was validated on an RTX 6000 Ada server. For Text2Img, the
+regenerated CAGRA and BANG base/query/GT files were byte-identical to the
+historical prepared files. Representative live Recall@10 reruns matched the
+recorded recall exactly:
+
+```text
+CAGRA Recall@10: 0.9090
+BANG  Recall@10: 0.9386
+```
+
+All four BANG compile-time contracts were built with CUDA 12.8 and checked with
+their adjacent source, library, binary, and checksum records. QPS is not
+expected to be byte-for-byte reproducible across different GPU clocks, host
+load, storage, CUDA/cuVS versions, and CPU thread counts; recall and parameter
+identity are the primary portability checks.
+
+With the historical 1M `pubmed_d2v` base supplied, all 42 GPU points retain
+their historical dataset contract. With only the public 500k Pubmed corpus, 39
+of 42 points do; the three CAGRA Pubmed runs are explicitly marked variants.
+BANG Pubmed is unaffected because its historical input used the 500k corpus.
+
+## 4. Fast regression tests
 
 Run from the repository root:
 
 ```bash
 bash script/test_gpu_baseline_repro.sh
 bash script/test_bang_index_build.sh
-GPU_Baseline/configure.sh --check
 ```
 
 The first test validates 21 CAGRA rows, 21 BANG rows, all four compile
 contracts, and both conversion profiles on synthetic FVECS data. The second
 test exercises BANG index construction, disk preprocessing, PQ-pivot rewrap,
-atomic publication, and cache validation with a mock builder. The environment
-check is useful after configuring machine-local dependency paths.
+atomic publication, and cache validation with a mock builder. Neither test
+requires a real GPU or a multi-gigabyte index.
+
+After supplying the two machine-local dependencies, validate the live
+environment separately:
+
+```bash
+GPU_Baseline/configure.sh \
+  --bang-builder /path/to/PipeANN/tests/build_disk_index \
+  --cagra-python /path/to/cuvs-env/bin/python
+GPU_Baseline/configure.sh --check
+```

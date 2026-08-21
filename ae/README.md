@@ -23,7 +23,7 @@ declared in `ae/requirements.txt`.
 
 | Figure | Reproduction input | YAML/configuration coverage | Default command uses GPU? |
 | --- | --- | --- | --- |
-| 14 | frozen 168-row QPS table | validates the complete 126-case portable simulator matrix | no |
+| 14 | frozen 168-row QPS table | validates 126 simulator YAMLs; 42 GPU rerun manifests are separate | no |
 | 15 | Figure 14 Recall@10 QPS plus area specifications | inherits Figure 14 YAML provenance | no |
 | 16--17 | Figure 14 QPS plus the fixed 42-trace energy table | validates the 42 final Recall@10 simulator YAMLs | no |
 | 18 | frozen CPU/BANG/ANSMET/MFNNS recall--QPS curves | parses and validates 108 archived ANSMET/MFNNS YAMLs and CPU/BANG provenance | no |
@@ -45,7 +45,9 @@ the source experiments is a separate, resource-intensive task:
 - Figure 14 uses repository-relative, directly runnable YAMLs.
   `script/cpu_index_build.sh` creates their indexes from normalized base
   vectors and simultaneously writes normalized queries and exact matching
-  ground truth.
+  ground truth. The separate 21-point CAGRA and 21-point BANG reruns are under
+  `GPU_Baseline/`; an exact CAGRA Pubmed rerun requires its documented
+  historical 1M-row base.
 - Figure 18 needs DP1B/T2I1B inputs and a big-memory node. Its archived YAMLs
   intentionally preserve historical input paths; the runner creates portable
   runtime copies from reviewer-supplied paths.
