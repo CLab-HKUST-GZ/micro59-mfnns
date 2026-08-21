@@ -12,7 +12,7 @@ Usage:
     --graph-degree N \
     [--intermediate-graph-degree N] \
     [--metric sqeuclidean] \
-    [--build-algo nn_descent] \
+    [--build-algo default|nn_descent] \
     [--nn-descent-niter N] \
     [--refinement-rate FLOAT] \
     [--output FILE.cagra] \
@@ -232,6 +232,15 @@ def make_index_params(args: argparse.Namespace):
         optional["nn_descent_niter"] = args.nn_descent_niter
     if args.refinement_rate is not None:
         optional["refinement_rate"] = args.refinement_rate
+
+    if args.build_algo == "default":
+        try:
+            return cagra.IndexParams(**common, **optional), None
+        except TypeError as error:
+            raise RuntimeError(
+                "Installed cuVS cannot express the requested default build "
+                f"options: {error}"
+            ) from error
 
     failures = []
     for algo_key in ("build_algo", "graph_build_algo"):

@@ -385,6 +385,7 @@ task_require_positive_integer --quantized-dim "$task_quantized_dim"
 
 task_python="$(task_resolve_executable "$task_python")"
 task_build_disk_index="$(task_resolve_executable "$task_build_disk_index")"
+task_build_disk_index_sha256="$(sha256sum "$task_build_disk_index" | awk '{print $1}')"
 command -v flock >/dev/null || task_fail "flock is required"
 [[ -x /usr/bin/time ]] || task_fail "/usr/bin/time is required"
 
@@ -527,6 +528,7 @@ printf 'BASE_SHAPE=%sx%s\n' "$task_n_rows" "$task_dim"
 printf 'BASE_BYTES=%s\n' "$task_base_bytes"
 printf 'SAMPLED_NORM_RANGE=%s..%s\n' "$task_norm_min" "$task_norm_max"
 printf 'BUILDER_API=%s\n' "$task_builder_api"
+printf 'BUILD_DISK_INDEX_SHA256=%s\n' "$task_build_disk_index_sha256"
 printf 'PRESET=%s\n' "${task_preset:-none}"
 printf 'INDEX_PREFIX=%s\n' "$task_prefix"
 printf 'BANG_INDEX_PREFIX=%s\n' "$task_bang_prefix"
@@ -611,7 +613,8 @@ if ((task_cache_complete == 1)); then
         "$task_build_memory_gb" "$task_threads" "$task_builder_api" \
         "$task_search_dram_budget_gb" "$task_indexing_ram_budget_gb" \
         "$task_build_pq_bytes" "$task_quantized_dim" "$task_pq_disk_bytes" \
-        "$task_expect_points" <<'PY'
+        "$task_expect_points" "$task_build_disk_index" \
+        "$task_build_disk_index_sha256" <<'PY'
 import json
 from pathlib import Path
 import sys
@@ -634,6 +637,8 @@ import sys
     quantized_dim_s,
     pq_disk_s,
     expect_points_s,
+    builder_s,
+    builder_sha256,
 ) = sys.argv[1:]
 payload = json.loads(Path(manifest_s).read_text(encoding="utf-8"))
 expected = {
@@ -644,6 +649,8 @@ expected = {
     "graph_degree": int(graph_r_s),
     "build_l": int(build_l_s),
     "threads": int(threads_s),
+    "build_disk_index": str(Path(builder_s).resolve()),
+    "build_disk_index_sha256": builder_sha256,
 }
 if payload.get("builder_api", "pipeann") != builder_api:
     raise SystemExit(
@@ -1033,7 +1040,8 @@ task_finished_epoch="$(date +%s)"
     "$task_search_dram_budget_gb" "$task_indexing_ram_budget_gb" \
     "$task_build_pq_bytes" "$task_quantized_dim" "$task_pq_disk_bytes" \
     "$task_expect_points" \
-    "$task_build_disk_index" "$task_python" "$task_prefix" "$task_bang_prefix" \
+    "$task_build_disk_index" "$task_build_disk_index_sha256" \
+    "$task_python" "$task_prefix" "$task_bang_prefix" \
     "$task_started_epoch" "$task_finished_epoch" <<'PY'
 from datetime import datetime, timezone
 import json
@@ -1065,6 +1073,7 @@ import sys
     pq_disk_s,
     expect_points_s,
     builder_s,
+    builder_sha256,
     python_s,
     prefix_s,
     bang_prefix_s,
@@ -1099,6 +1108,7 @@ payload = {
     "build_mode": "pq",
     "datatype": "float32",
     "build_disk_index": str(Path(builder_s).resolve()),
+    "build_disk_index_sha256": builder_sha256,
     "python": str(Path(python_s).resolve()),
     "index_prefix": prefix_s,
     "bang_index_prefix": bang_prefix_s,
